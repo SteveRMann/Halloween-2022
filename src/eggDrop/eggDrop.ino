@@ -1,16 +1,21 @@
 #define SKETCH "eggDrop.ino"
 
-const int servo1Pin = D1;
-const int servo2Pin = D2;
+const int servo1Pin = D1;           // Drop servo
+const int servo2Pin = D2;           // Preload servo
+const int servo1LedPin = D3;
+const int servo2LedPin = D4;
+
+#define ledON 1
+#define ledOFF 0
 
 #include <Servo.h>
-Servo servoOne;
-Servo servoTwo;
+Servo servoOne;                     // Exit servo
+Servo servoTwo;                     // Preload servo
 
 int servo1Position;
 int servo2Position;
-const int dropDelay = 700;          //How long the drop servo is open.
-const int loadDelay = 450;          //How long the load servo is open.
+const int dropDelay = 700;          // How long the drop servo is open.
+const int loadDelay = 450;          // How long the load servo is open.
 
 void setup() {
   while (!Serial);
@@ -32,6 +37,9 @@ void setup() {
   servoOne.attach(servo1Pin, 625, 2600);    //PWM range for SG90 servos
   servoTwo.attach(servo2Pin, 625, 2600);    //PWM range for SG90 servos
 
+  pinMode(servo1LedPin, OUTPUT);
+  pinMode(servo2LedPin, OUTPUT);
+
   dropServoClose();
   loadServoClose();
   delay(1000);
@@ -49,6 +57,7 @@ void loop() {
   Serial.println(F( "3) Drop one egg" ));
   Serial.println(F( "4) Drop six eggs" ));
   Serial.println(F( "5) Drop ten eggs" ));
+  Serial.println(F( "7) Stress" ));
   Serial.println(F( "8) Preload" ));
   //Serial.println(F( "9) 180° sweep" ));
   Serial.println(F( "-----------------------------" ));
@@ -91,6 +100,10 @@ void loop() {
         dropEgg(10);
         //delay(500);
         isValidInput = true;
+        break;
+
+      case '7':                                   // Stress. Drop an egg every 30-seconds.
+        stress();                                 // Reboot to end
         break;
 
       case '8':                                   // Preload
@@ -136,14 +149,18 @@ void dropEgg(int howMany) {
     howMany--;
     printf(" egg# %d.\n", howMany);
     dropServoOpen();                            //Exit
+    digitalWrite (servo1LedPin, ledON);
     delay(dropDelay);
     dropServoClose();
+    digitalWrite (servo1LedPin, ledOFF);
     delay(dropDelay);                   //Let 'drop' close before 'load' opens
 
 
     loadServoOpen();                            //Load
+    digitalWrite (servo2LedPin, ledON);
     delay(loadDelay);
     loadServoClose();
+    digitalWrite (servo2LedPin, ledOFF);
 
     delay(2000);                     //Time between eggs
   }
@@ -167,4 +184,11 @@ void loadServoOpen() {                          //Open the preload servo
 void loadServoClose() {                         //Close the preload
   servoTwo.write(90);
   servo2Position = 90;
+}
+
+void stress() {                                 //Reboot to end
+  while (1) {
+    dropEgg(1);
+    delay(30000);
+  }
 }
