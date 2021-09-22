@@ -1,12 +1,29 @@
-#define SKETCH "eggDrop.ino"
+#define SKETCH "eggDrop"
+#define VERSION "2.0"
 
-const int servo1Pin = D1;           // Drop servo
-const int servo2Pin = D2;           // Preload servo
+const int servo1Pin = D1;           //Drop servo
+const int servo2Pin = D2;           //Preload servo
 const int servo1LedPin = D3;
 const int servo2LedPin = D4;
 
+bool stressFlag = false;
+const int STRESS_PERIOD = 10000;    //How long between stress cycles
+unsigned int lastTimeChecked = 0;
+unsigned long loopMillis = 0;
+
 #define ledON 1
 #define ledOFF 0
+
+#include <ArduinoOTA.h>
+
+//--------------- WiFi declarations ---------------
+// WiFi declarations
+#include <ESP8266WiFi.h>        // Not needed if also using the Arduino OTA Library...
+#include <Kaywinnet.h>          // WiFi credentials
+char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
+char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
+char nodeName[] = SKETCH;       // Give this node a name
+
 
 #include <Servo.h>
 Servo servoOne;                     // Exit servo
@@ -17,13 +34,38 @@ int servo2Position;
 const int dropDelay = 700;          // How long the drop servo is open.
 const int loadDelay = 450;          // How long the load servo is open.
 
+
+//--------------- MQTT declarations ---------------
+#include <ESP8266WiFi.h>        // Connect (and reconnect) an ESP8266 to the a WiFi network.
+#include <PubSubClient.h>       // connect to a MQTT broker and publish/subscribe messages in topics.
+// Declare an object of class WiFiClient, which allows to establish a connection to a specific IP and port
+// Declare an object of class PubSubClient, which receives as input of the constructor the previously defined WiFiClient.
+// The constructor MUST be unique on the network. (Does it?)
+WiFiClient eggdrop;
+PubSubClient client(eggdrop);
+
+// Declare strings for the topics. Topics will be created in setup_mqtt().
+char statusTopic[20];
+char cmndTopic[20];
+char rssiTopic[20];
+
+
+const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
+const int mqttPort = 1883;
+
+
+
+// -------------- setup() --------------
 void setup() {
-  while (!Serial);
-  Serial.begin( 115200 );
-  Serial.println();
-  Serial.println();
-  Serial.println(SKETCH);
-  Serial.println(F("+++++++++++++++++++"));
+  beginSerial();
+  setup_wifi();                   // MUST be before setupMqtt()
+  start_OTA();                    // If using OTA
+  setup_mqtt();                   // Generate the topics
+
+  // Call the setServer method on the PubSubClient object
+  client.setServer(mqttServer, mqttPort);
+  mqttConnect();
+
 
   /*
     Specs in https://www.servocity.com/hs-645mg-servo/
@@ -42,102 +84,23 @@ void setup() {
 
   dropServoClose();
   loadServoClose();
+  stressFlag = false;
+
   delay(1000);
 }
 
 
+// -------------- loop() --------------
 void loop() {
-  bool isValidInput;
+  ArduinoOTA.handle();
+  mqttReconnect();         //Make sure we stay connected to the mqtt broker
+  loopMillis = millis();
 
-  // draw a menu on the serial port
-  Serial.println(F( "-----------------------------" ));
-  Serial.println(F( "MENU:" ));
-  Serial.println(F( "1) Close both" ));
-  Serial.println(F( "2) Open both" ));
-  Serial.println(F( "3) Drop one egg" ));
-  Serial.println(F( "4) Drop six eggs" ));
-  Serial.println(F( "5) Drop ten eggs" ));
-  Serial.println(F( "7) Stress" ));
-  Serial.println(F( "8) Preload" ));
-  //Serial.println(F( "9) 180° sweep" ));
-  Serial.println(F( "-----------------------------" ));
-
-  do {
-    byte c;
-    // get the next character from the serial port
-    Serial.print( "? " );
-    while ( !Serial.available() ) ;
-    c = Serial.read();
-
-    switch ( c )
-    {
-      case '1':                                   // Close Both
-        Serial.println(F("1- Close Both"));
-        dropServoClose();
-        loadServoClose();
-        isValidInput = true;
-        break;
-
-      case '2':                                   // Open both
-        Serial.println(F("1- Open both"));
-        dropServoOpen();
-        loadServoOpen();
-        isValidInput = true;
-        break;
-
-      case '3':                                   // Drop one egg
-        dropEgg(1);
-        isValidInput = true;
-        break;
-
-      case '4':                                   // Drop six eggs
-        dropEgg(6);
-        //delay(500);
-        isValidInput = true;
-        break;
-
-      case '5':                                   // Drop 10 eggs
-        dropEgg(10);
-        //delay(500);
-        isValidInput = true;
-        break;
-
-      case '7':                                   // Stress. Drop an egg every 30-seconds.
-        stress();                                 // Reboot to end
-        break;
-
-      case '8':                                   // Preload
-        Serial.println(F("8- Preload"));
-        dropServoClose();
-        loadServoOpen();
-        isValidInput = true;
-        break;
-
-      /*
-            case '9':                                   // Sweep 0-180ºuntil any alpha key is entered.
-              Serial.println(F("9- Sweep. Reset to stop"));
-              while (isValidInput == true) {
-                servoOne.write(180);
-                servoTwo.write(180);
-                delay(2000);
-                servoOne.write(0);
-                servoTwo.write(0);
-                delay(2000);
-              }
-              isValidInput = true;
-              break;
-      */
-
-      default:
-        // wrong character! display the menu again!
-        isValidInput = false;
-        break;
-    }
-  } while ( isValidInput == true );
-
-
+  if (stressFlag) stress();
 }
 
+
+// -------------- dropEgg() --------------
 void dropEgg(int howMany) {
   printf("\nDropping\n");
   if (servo1Position != 90) {            //Make sure we're closed.
@@ -166,29 +129,58 @@ void dropEgg(int howMany) {
   }
 }
 
+// -------------- dropServoOpen() --------------
 void dropServoOpen() {                          //Open the exit
   servoOne.write(0);
   servo1Position = 0;
 }
 
+// -------------- dropServoClose() --------------
 void dropServoClose() {                         //Close the exit
   servoOne.write(90);
   servo1Position = 90;
 }
 
+// -------------- loadServoOpen() --------------
 void loadServoOpen() {                          //Open the preload servo
   servoTwo.write(0);
   servo2Position = 0;
 }
 
+// -------------- loadServoClose() --------------
 void loadServoClose() {                         //Close the preload
   servoTwo.write(90);
   servo2Position = 90;
 }
 
-void stress() {                                 //Reboot to end
-  while (1) {
+// -------------- stress() --------------
+void stress() {
+  //Drop an egg every STRESS_PERIOD
+  if (millis() - lastTimeChecked >= STRESS_PERIOD) {
     dropEgg(1);
-    delay(30000);
+    lastTimeChecked = millis();
   }
+}
+
+
+// -------------- beginSerial() --------------
+void beginSerial() {
+  while (!Serial);
+  Serial.begin( 115200 );
+  Serial.println();
+  Serial.println();
+  Serial.print(SKETCH);
+  Serial.print(".ino, Version ");
+  Serial.println(VERSION);
+  Serial.println(F("++++++++++++++++++ +"));
+}
+
+// ********************** Function to display a string for debugging. **********************
+void dbugs(const char *s, const char *v) {
+  //Show a string variable. Enter with the string description and the string.
+  //Example dbugs("My String= ",myString);
+  Serial.print(s);
+  Serial.print (F("\""));
+  Serial.print(v);
+  Serial.println(F("\""));
 }
