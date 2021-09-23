@@ -5,6 +5,8 @@ const int servo1Pin = D1;           //Drop servo
 const int servo2Pin = D2;           //Preload servo
 const int servo1LedPin = D3;
 const int servo2LedPin = D4;
+const int BUTTON_PIN = D5;
+const int BLUE_LED_PIN = D6;
 
 bool stressFlag = false;
 const int STRESS_PERIOD = 10000;    //How long between stress cycles
@@ -15,6 +17,10 @@ unsigned long loopMillis = 0;
 #define ledOFF 0
 
 #include <ArduinoOTA.h>
+
+//for LED status
+#include <Ticker.h>
+Ticker blueTicker;                //Ticker object for the WiFi Connecting LED
 
 //--------------- WiFi declarations ---------------
 // WiFi declarations
@@ -49,7 +55,6 @@ char statusTopic[20];
 char cmndTopic[20];
 char rssiTopic[20];
 
-
 const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
 const int mqttPort = 1883;
 
@@ -57,10 +62,15 @@ const int mqttPort = 1883;
 
 // -------------- setup() --------------
 void setup() {
+  pinMode(servo1LedPin, OUTPUT);
+  pinMode(servo2LedPin, OUTPUT);
+  pinMode(BLUE_LED_PIN, OUTPUT);      // Must be before calling setup_wifi
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
   beginSerial();
-  setup_wifi();                   // MUST be before setupMqtt()
-  start_OTA();                    // If using OTA
-  setup_mqtt();                   // Generate the topics
+  setup_wifi();                       // MUST be before setupMqtt()
+  start_OTA();                        // If using OTA
+  setup_mqtt();                       // Generate the topics
 
   // Call the setServer method on the PubSubClient object
   client.setServer(mqttServer, mqttPort);
@@ -79,12 +89,12 @@ void setup() {
   servoOne.attach(servo1Pin, 625, 2600);    //PWM range for SG90 servos
   servoTwo.attach(servo2Pin, 625, 2600);    //PWM range for SG90 servos
 
-  pinMode(servo1LedPin, OUTPUT);
-  pinMode(servo2LedPin, OUTPUT);
-
   dropServoClose();
   loadServoClose();
   stressFlag = false;
+
+  //digitalWrite(BLUE_LED_PIN, ledON);
+  analogWrite(BLUE_LED_PIN, 50);            //Leave it on, but dim.
 
   delay(1000);
 }
@@ -97,6 +107,8 @@ void loop() {
   loopMillis = millis();
 
   if (stressFlag) stress();
+  int i = digitalRead(BUTTON_PIN);
+  if (i == 0) dropEgg(1);
 }
 
 
@@ -175,7 +187,7 @@ void beginSerial() {
   Serial.println(F("++++++++++++++++++ +"));
 }
 
-// ********************** Function to display a string for debugging. **********************
+// *********** Function to display a string for debugging. ***********
 void dbugs(const char *s, const char *v) {
   //Show a string variable. Enter with the string description and the string.
   //Example dbugs("My String= ",myString);
@@ -183,4 +195,11 @@ void dbugs(const char *s, const char *v) {
   Serial.print (F("\""));
   Serial.print(v);
   Serial.println(F("\""));
+}
+
+// *********** Function to blink the WiFi status LED ***********
+void blueTick() {
+  //toggle state
+  int state = digitalRead(BLUE_LED_PIN);            // get the current state of GPIO pin
+  digitalWrite(BLUE_LED_PIN, !state);               // set pin to the opposite state
 }
