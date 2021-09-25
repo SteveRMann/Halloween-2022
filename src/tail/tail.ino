@@ -1,48 +1,74 @@
-#define SKETCH "tail"
-#define VERSION "2.0"
+#define SKETCH "Tail.ino"
 
-//GPIO Pins
-const int MOTOR1 = D1;
-const int MOTOR2 = D2;
-const int BUTTON_PIN = D3;
+//Motor Pins
+int Motor1 = D1;
+int Motor2 = D2;
 
 
-#include <ArduinoOTA.h>
+// --------------- functions ---------------
+void forward(int duration) {
+  digitalWrite (Motor1, LOW);
+  digitalWrite (Motor2, HIGH);
+  delay (duration);
+}
 
-//--------------- WiFi declarations ---------------
-// WiFi declarations
-#include <ESP8266WiFi.h>        // Not needed if also using the Arduino OTA Library...
-#include <Kaywinnet.h>          // WiFi credentials
-char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
-char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
-char nodeName[] = SKETCH;       // Give this node a name
+void stop(int duration) {
+  digitalWrite (Motor1, LOW);
+  digitalWrite (Motor2, LOW);
+  delay (duration);
+}
+
+void reverse(int duration) {
+  digitalWrite (Motor1, HIGH);
+  digitalWrite (Motor2, LOW);
+  delay (duration);
+}
+
+void forwardSlow(int pwm, int duration) {
+  analogWrite (Motor1, pwm);
+  digitalWrite (Motor2, LOW);
+  delay (duration);
+}
+
+void reverseSlow(int pwm, int duration) {
+  digitalWrite (Motor1, LOW);
+  analogWrite (Motor2, pwm);
+  delay (duration);
+}
+
+void rampUp() {
+  digitalWrite (Motor2, LOW);
+  for (int i = 0; i < 100; i++) {
+    analogWrite (Motor1, i);
+    delay(10);
+  }
+  delay (1000);
+}
 
 
-// --------------- ticker declarations ---------------
-// for LED status
-#include <Ticker.h>
-Ticker blueTicker;
-const int BLUE_LED_PIN = D4;
+// --------------- setup ---------------
+void setup() {
+  Serial.begin( 115200 );
+  Serial.println();
+  Serial.println(SKETCH);
+  //configure pins as outputs
+  pinMode (Motor1, OUTPUT);
+  pinMode (Motor2, OUTPUT);
 
 
-//--------------- MQTT declarations ---------------
-#include <ESP8266WiFi.h>        // Connect (and reconnect) an ESP8266 to the a WiFi network.
-#include <PubSubClient.h>       // connect to a MQTT broker and publish/subscribe messages in topics.
-// Declare an object of class WiFiClient, which allows to establish a connection to a specific IP and port
-// Declare an object of class PubSubClient, which receives as input the constructor previously defined with WiFiClient.
-// The constructor MUST be unique on the network. (Does it?)
-WiFiClient tail;
-PubSubClient client(tail);
+  forwardSlow(300, 100);
+  delay(100);
+  stop(25);
+  reverseSlow(300, 100);
+  delay(100);
 
-const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
-const int mqttPort = 1883;
+  //reverse();
+  stop(100);
+  //rampUp();
+  //stop();
 
-// Declare strings for the topics. Topics will be created in setup_mqtt().
-char statusTopic[20];
-char cmndTopic[20];
-char rssiTopic[20];
+}
 
-
-// --------------- button declarations ---------------
-#include "OneButton.h"
-OneButton button(BUTTON_PIN);
+//--------------- loop ---------------
+void loop() {
+}
