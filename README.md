@@ -20,7 +20,7 @@ Just contains random notes used while making the box
 ## Sounds
 Contains the sound files and editing information. It also contains the DFPlayer notes.
 
-##src
+## src
 ### eggDrop
 This is the code that operates a servo to drop an egg.
 EggDrop is separate from the monster box, but basically it drops a plastic egg on command.
