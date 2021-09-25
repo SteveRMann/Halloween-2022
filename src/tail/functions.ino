@@ -106,3 +106,19 @@ void slowWag(int count) {
     stop(225);
   }
 }
+
+// ---------- button functions ----------
+void singleClick() {
+  Serial.println(F("singleClick=twitch(1)"));
+  twitch(1);
+}
+
+void doubleclick() {
+  Serial.println(F("doubleClick=largeTwitch(1)"));
+  largeTwitch(1);
+}
+
+void longPress() {
+  Serial.println(F("longPress=wag(2)"));
+  wag(2);
+}

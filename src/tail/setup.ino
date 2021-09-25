@@ -20,6 +20,10 @@ void setup() {
   client.setServer(mqttServer, mqttPort);
   mqttConnect();
 
+  button.attachDoubleClick(doubleclick);
+  button.attachClick(singleClick);
+  button.attachLongPressStop(longPress);
+
   twitch(1);
   drawMenu();
 }

@@ -41,3 +41,8 @@ const int mqttPort = 1883;
 char statusTopic[20];
 char cmndTopic[20];
 char rssiTopic[20];
+
+
+// --------------- button declarations ---------------
+#include "OneButton.h"
+OneButton button(BUTTON_PIN);
