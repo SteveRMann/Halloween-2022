@@ -11,24 +11,25 @@ An ultrasonic fog transducer from Amazon is also inside the box to add fog effec
 ## Crate
 Contains images and ideas for the crate construction
 
-### eggDrop
-This is the code that operates a servo to drop an egg.
-EggDrop is separate from the monster box, but basically it drops a plastic egg on command.
-
 ## Fan
 Contains the schematic files for the fan and LED MOSFET controller.
-
-### HBridgeTest
-Code to test the H-Bridges
-
-### Lid
-Contains the Arduino source code for the lid mechanism.
 
 ## Notes
 Just contains random notes used while making the box
 
 ## Sounds
 Contains the sound files and editing information. It also contains the DFPlayer notes.
+
+##src
+### eggDrop
+This is the code that operates a servo to drop an egg.
+EggDrop is separate from the monster box, but basically it drops a plastic egg on command.
+
+### HBridgeTest
+Code to test the H-Bridges
+
+### Lid
+Contains the Arduino source code for the lid mechanism.
 
 ### servoSweep
 Code to sweep the servo 0-180 degrees.
