@@ -2,28 +2,6 @@
 // ============================= Connect the ESP to the router =============================
 // Connect to WiFi network so we can reach the MQTT broker and publish messages to topics.
 
-/*
-  Make sure you include at the start of the sketch:
-  //--------------- WiFi declarations ---------------
-  // WiFi declarations
-  #define SKETCH_NAME "netMonitor"  //No punctuation
-  #define SKETCH_VERSION "1.0"
-  #include <ESP8266WiFi.h>        // Not needed if also using the Arduino OTA Library...
-  #include <Kaywinnet.h>          // WiFi credentials
-  char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
-  char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
-  //----------- End of WiFi declarations -----------
-
-  // --------------- Typical setup ---------------
-  void setup() {
-    beginSerial();
-    setup_wifi();
-    start_OTA();      // Follows setupWifi()
-  }
-
-
-*/
-
 void setup_wifi() {
 #ifndef Kaywinnet
 #include <Kaywinnet.h>            // Network credentials
@@ -39,9 +17,12 @@ void setup_wifi() {
   //WiFi.enableInsecureWEP();
   WiFi.begin(MY_SSID, MY_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
+    //Blink the WiFi status LED
+    blueTicker.attach(0.1, blueTick);        // Start blueTick() while we connect
     delay(500);
     Serial.print(WiFi.status()); Serial.print(F(" "));
   }
+  blueTicker.detach();                     // Stop blueTick()
   Serial.println(F("\nWiFi connected, "));
   Serial.print(F("MAC Address: "));
   Serial.println(WiFi.macAddress());
@@ -63,24 +44,4 @@ void setup_wifi() {
   strcat(hostName, macBuffer);
   WiFi.hostname(hostName);
   dbugs("hostName= ", hostName);
-
-
-  /* Some experiments
-    int value = atoi(mac5);
-    Serial.print("------mac5= ");
-    Serial.print(value);
-    Serial.println("----------");
-
-    int numbr = stringChecksum(macBuffer);
-    Serial.print("------Checksum= ");
-    Serial.print(numbr);
-    Serial.println("----------");
-
-    char mac5h[3];
-    sprintf(mac5h, "%x", value);
-    Serial.print("------mac5h= ");
-    Serial.print(mac5h);
-    Serial.println("----------");
-  */
-
 }

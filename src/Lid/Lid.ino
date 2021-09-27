@@ -1,5 +1,5 @@
-#define SKETCH_NAME "Lid.ino"
-#define SKETCH_VERSION "6.0"
+#define SKETCH "Lid"
+#define VERSION "6.1"
 
 /*
    Brushed Motor Speed Control
@@ -37,7 +37,7 @@ int motorState = 0;
 #include <Kaywinnet.h>          // WiFi credentials
 char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
 char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
-char nodeName[] = SKETCH_NAME;  // Give this node a name
+char nodeName[] = SKETCH;       // Give this node a name
 
 
 
@@ -52,8 +52,8 @@ char nodeName[] = SKETCH_NAME;  // Give this node a name
 // Declare an object of class WiFiClient
 // Declare an object of class PubSubClient, which receives as input of the constructor the previously defined WiFiClient.
 // The constructor MUST be unique on the network. (Does it?)
-WiFiClient monsterBox;
-PubSubClient client(monsterBox);
+WiFiClient monsterBoxLid;
+PubSubClient client(monsterBoxLid);
 
 // Declare strings for the topics. Topics will be created in setup_mqtt().
 char statusTopic[20];
@@ -65,107 +65,7 @@ const int mqttPort = 1883;
 
 
 //--------------- ticker ---------------
-//Function prototype must precede the ticker init
-//void motorStart();
-
-//#include <Ticker.h>
-//Ticker motorTimer;
-
-
-
-//=============== setup ===============
-void setup() {
-  beginSerial();
-  setup_wifi();
-  start_OTA();
-  setup_mqtt();                         //Generate the topics
-  client.setServer(mqttServer, mqttPort);
-  mqttConnect();
-
-
-  Serial.println(F("---------- Starting ----------"));
-
-  pinMode(closedSwitch, INPUT_PULLUP);
-  pinMode(openSwitch, INPUT_PULLUP);
-  pinMode(startSwitch, INPUT_PULLUP);
-
-  // Start the motor periodically
-  //  motorTimer.attach(8.0, motorOn);
-
-  lidState = 0;     //Open
-}
-
-
-//=============== loop ===============
-void loop() {
-  ArduinoOTA.handle();
-  mqttReconnect();         //Make sure we stay connected to the mqtt broker
-
-  closeTheLid();
-  delay(FIVESEC);
-  openTheLid();
-  delay(FIVESEC);
-
-  /*
-  closeTheLid();
-  delay(6000);
-
-  //Thrash the lid
-  motorPwm = 200;                   //Fast
-  for (int i = 0; i < 5; i++) {
-    openTheLid();
-    closeTheLid();
-  }
-  motorPwm = MIN_PWM;               //Default speed
-  delay(15000);
-  */
-}
-
-
-// ========= Start the motor =========
-void startTheMotor() {
-  Serial.println(F("motor on"));
-  analogWrite(motorPin, motorPwm);            //Turn on the motor to motorPwm
-  motorState = 1;                             //Just used to print debug statements only once.
-  delay(100);                                 //Give the motor time to move past the stop switch.
-  Serial.print(F("openSwitch= "));
-  Serial.println(digitalRead(openSwitch));
-  Serial.print(F("closedSwitch= "));
-  Serial.println(digitalRead(closedSwitch));
-  
-}
-
-// ---------- Open the lid ----------
-void openTheLid() {
-  startTheMotor();
-  while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
-  analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
-  if (motorState == 1) {                      //Just print once
-    Serial.println(F("OPEN"));
-    motorState = 0;
-  }
-}
-
-// ---------- Close the lid ----------
-void closeTheLid() {
-  startTheMotor();
-  while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
-  analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
-  if (motorState == 1) {                      //Just print once
-    Serial.println(F("CLOSED"));
-    motorState = 0;
-  }
-}
-
-
-
-//=============== motorOn ===============
-//Function called by the ticker.
-void motorOn() {
-  //Serial.println(F("Tick"));
-  flagMotorOn = true;
-  lidState += 1;
-  if (lidState > 2) lidState = 0;
-}
+const int BLUE_LED_PIN = LED_BUILTIN;    //D4 is LED_BUILTIN on Wemos D1 Mini
+//for LED status
+#include <Ticker.h>
+Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED
