@@ -6051,7 +6051,7 @@ W = angled&lt;p&gt;
 <text x="149.352" y="96.774" size="1.778" layer="95">_</text>
 <text x="137.414" y="95.758" size="1.778" layer="97">+5V
 from PSU</text>
-<text x="139.446" y="91.948" size="1.27" layer="97">D4 (GPIO2)</text>
+<text x="139.446" y="91.948" size="1.27" layer="97">D3 (GPIO0)</text>
 <text x="109.22" y="66.04" size="1.778" layer="97">Open</text>
 <text x="124.46" y="66.04" size="1.778" layer="97">Closed</text>
 <text x="121.666" y="73.66" size="1.27" layer="97" rot="R90">Yellow</text>
@@ -6063,6 +6063,14 @@ from PSU</text>
 <text x="162.306" y="107.188" size="1.27" layer="97" rot="R90">Red</text>
 <text x="241.3" y="7.62" size="2.54" layer="94">5</text>
 <text x="99.06" y="66.04" size="1.778" layer="97">Action</text>
+<text x="73.66" y="165.1" size="2.286" layer="97">Wire legend
+Rx  Tx  D1       D2      D3      D4       G +5
+           Yellow  Pink    Violet  Button
+           Closed  Open   PWM</text>
+<wire x1="63.5" y1="180.34" x2="137.16" y2="180.34" width="1.016" layer="97"/>
+<wire x1="137.16" y1="180.34" x2="137.16" y2="160.02" width="1.016" layer="97"/>
+<wire x1="137.16" y1="160.02" x2="63.5" y2="160.02" width="1.016" layer="97"/>
+<wire x1="63.5" y1="160.02" x2="63.5" y2="180.34" width="1.016" layer="97"/>
 </plain>
 <instances>
 <instance part="X_1" gate="G$1" x="162.56" y="48.26" smashed="yes"/>
