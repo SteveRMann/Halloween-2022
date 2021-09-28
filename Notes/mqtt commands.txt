@@ -7,7 +7,4 @@ tail/cmnd
   slowWag
   
 lid/cmnd
-  fanon
-  fanoff
-  eyeson
-  eyesoff
+  

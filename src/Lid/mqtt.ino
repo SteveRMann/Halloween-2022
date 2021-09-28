@@ -97,41 +97,38 @@ void callback(String topic, byte * payload, unsigned int length) {
     Serial.print(F("received message on cmdTopic: '"));
     Serial.print(message);
     Serial.println(F("'"));
-    
-    if (!strcmp(message, "reset")) {
-      //Close both servos.
-      Serial.println(F("Close both servos"));
-      //dropServoClose();
-      //loadServoClose();
+
+    if (!strcmp(message, "fanon")) {
+      //Turn on the mist fan.
+      Serial.println(F("Fan On"));
+      analogWrite(FAN_PIN, 250);
     }
 
-    if (!strcmp(message, "flush")) {     // if message=="flush", then strcmp returns a zero (false).
-      //Open both servos.
-      Serial.println(F("Open both servos"));
-      //dropServoOpen();
-      //loadServoOpen();
+    if (!strcmp(message, "fanoff")) {
+      //Turn on the mist fan.
+      Serial.println(F("Fan Off"));
+      analogWrite(FAN_PIN, 0);
     }
 
-    if (!strcmp(message, "drop")) {
-      //Drop one egg
-      Serial.println(F("Drop one egg"));
-      //dropEgg(1);
+    if (!strcmp(message, "eyeson")) {
+      //Turn on the eyes
+      Serial.println(F("Eyes On"));
+      digitalWrite(LEDS_PIN, 1);
     }
 
-    if (!strcmp(message, "stress")) {
-      //Drop an egg every 30-seconds.
-      Serial.println(F("Drop an egg every 30-seconds."));
-      //  lastTimeChecked = millis();
+    if (!strcmp(message, "eyesoff")) {
+      //Turn off the eyes
+      Serial.println(F("Eyes Off"));
+      digitalWrite(LEDS_PIN, 0);
     }
 
     if (!strcmp(message, "help")) {
       //Print the available commands
       Serial.println(F("Commands:"));
-      //Serial.println(F("reset -  Close both servos."));
-      //Serial.println(F("drop -   Drop one egg."));
-      //Serial.println(F("flush -  Open both servos."));
-      //Serial.println(F("stress - Stress Test, drop an egg every STRESS_PERIOD ms."));
-      //dropEgg(1);
+      //Serial.println(F("fanOn -  Turn on the mist fan."));
+      //Serial.println(F("fanOff - Turn off the mist fan."));
+      //Serial.println(F("eyesOn - Turn on the eyes LEDs."));
+      //Serial.println(F("eyesOff- Turn off the eyes LEDs."));
     }
 
   }

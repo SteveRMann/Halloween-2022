@@ -29,16 +29,43 @@ void menu() {
     }
 
     if (c == '3') {
-      Serial.println(F("2- Slow open"));
+      Serial.println(F("3- Slow open"));
       slowOpen();
       c = '0';
     }
 
     if (c == '4') {
-      Serial.println(F("2- Slow close"));
+      Serial.println(F("4- Slow close"));
       slowClose();
       c = '0';
     }
+
+if (c == '5') {
+      Serial.println(F("5- Eyes On"));
+      digitalWrite(LEDS_PIN, 1);
+      c = '0';
+    }
+
+if (c == '6') {
+      Serial.println(F("6- Eyes Off"));
+      digitalWrite(LEDS_PIN, 0);
+      c = '0';
+    }
+
+if (c == '7') {
+      Serial.println(F("7- Fan On"));
+      analogWrite(FAN_PIN, 255);
+      c = '0';
+    }
+    
+if (c == '8') {
+      Serial.println(F("8- Fan Off"));
+      analogWrite(FAN_PIN, 0);
+      c = '0';
+    }
+    
+
+    
   }
 }
 
@@ -50,6 +77,10 @@ void drawMenu() {
   Serial.println(F( "2) Close" ));
   Serial.println(F( "3) Slow open-close" ));
   Serial.println(F( "4) Fast open-close" ));
+  Serial.println(F( "5) Eyes ON" ));
+  Serial.println(F( "6) Eyes OFF" ));
+  Serial.println(F( "7) Fan ON" ));
+  Serial.println(F( "8) Fan Off" ));
   Serial.println(F( "-----------------------------" ));
   Serial.print( "? " );
 }

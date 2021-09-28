@@ -17,6 +17,8 @@ const int motorPin = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
 const int buttonPin = D4;
+const int LEDS_PIN = D5;
+const int FAN_PIN = D6;            
 
 const long int Minutes = 60000;           //ms per minute
 const long int Seconds = 1000;            //ms per second
@@ -66,3 +68,4 @@ const int BLUE_LED_PIN = D7;             //D4 is LED_BUILTIN on Wemos D1 Mini
 //for LED status
 #include <Ticker.h>
 Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED
+Ticker eyesTicker;           //Testing

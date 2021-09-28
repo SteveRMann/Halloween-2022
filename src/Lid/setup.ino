@@ -5,7 +5,9 @@ void setup() {
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(BLUE_LED_PIN, OUTPUT);
   analogWrite(motorPin, 0);             //PWM pin, start at zero.
-  
+  pinMode(LEDS_PIN, OUTPUT);
+  pinMode(FAN_PIN, OUTPUT);
+
   beginSerial();
   setup_wifi();
   start_OTA();
@@ -17,4 +19,15 @@ void setup() {
 
   lidState = 0;     //Open
   drawMenu();
+
+  //Testing D5 LEDs (yellow) and D6 FAN (green)
+  eyesTicker.attach(0.1, eyesTick);          // Start eyesTick
+  delay(1000);
+    eyesTicker.detach();
+    delay(550);
+
+  //Fan
+  analogWrite(FAN_PIN, 250);
+  delay(2000);
+  analogWrite(FAN_PIN, 0);
 }
