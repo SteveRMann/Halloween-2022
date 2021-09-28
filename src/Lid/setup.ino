@@ -2,8 +2,10 @@
 void setup() {
   pinMode(closedSwitch, INPUT_PULLUP);
   pinMode(openSwitch, INPUT_PULLUP);
-  pinMode(startSwitch, INPUT_PULLUP);
-
+  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(BLUE_LED_PIN, OUTPUT);
+  analogWrite(motorPin, 0);             //PWM pin, start at zero.
+  
   beginSerial();
   setup_wifi();
   start_OTA();

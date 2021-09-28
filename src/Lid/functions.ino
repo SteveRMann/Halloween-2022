@@ -23,44 +23,70 @@ void beginSerial() {
   delay(2500);
 }
 
-/////////////// Functions unique to this sketch ////////////////
-
+// ---------- Functions unique to this sketch ----------
 // ========= Start the motor =========
 void startTheMotor() {
   Serial.println(F("motor on"));
   analogWrite(motorPin, motorPwm);            //Turn on the motor to motorPwm
-  motorState = 1;                             //Just used to print debug statements only once.
   delay(100);                                 //Give the motor time to move past the stop switch.
   Serial.print(F("openSwitch= "));
   Serial.println(digitalRead(openSwitch));
   Serial.print(F("closedSwitch= "));
   Serial.println(digitalRead(closedSwitch));
-  
 }
 
 // ---------- Open the lid ----------
 void openTheLid() {
   startTheMotor();
+  analogWrite(motorPin, 100);        //Slow it down
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
-  if (motorState == 1) {                      //Just print once
-    Serial.println(F("OPEN"));
-    motorState = 0;
-  }
+  Serial.println(F("OPEN"));
+}
+
+
+// ---------- Slow Open the lid ----------
+void slowOpen() {
+  startTheMotor();
+  analogWrite(motorPin, 80);                  //Slow it down
+  while (digitalRead(openSwitch)) yield();    //Wait for the open switch closes (==0)
+  analogWrite(motorPin, 0);                   //Stop the motor
+  Serial.print(F("motor off"));
+  Serial.println(F("OPEN"));
+}
+
+
+// ---------- Fast Open the lid ----------
+void fastOpen() {
+  startTheMotor();
+  analogWrite(motorPin, 250);                 //Speed it up
+  while (digitalRead(openSwitch)) yield();    //Wait for the open switch closes (==0)
+  analogWrite(motorPin, 0);                   //Stop the motor
+  Serial.print(F("motor off"));
+  Serial.println(F("OPEN"));
 }
 
 // ---------- Close the lid ----------
 void closeTheLid() {
   startTheMotor();
+  analogWrite(motorPin, 100);        //Slow it down
   while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
-  if (motorState == 1) {                      //Just print once
-    Serial.println(F("CLOSED"));
-    motorState = 0;
-  }
+  Serial.println(F("CLOSED"));
 }
+
+// ---------- Slow close the lid ----------
+void slowClose() {
+  startTheMotor();
+  analogWrite(motorPin, 80);        //Slow it down
+  while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
+  analogWrite(motorPin, 0);                   //Stop the motor
+  Serial.print(F("motor off"));
+  Serial.println(F("CLOSED"));
+}
+
 
 
 //=============== motorOn ===============

@@ -1,8 +1,8 @@
 #define SKETCH "Lid"
-#define VERSION "6.1"
+#define VERSION "6.2"
 
 /*
-   Brushed Motor Speed Control
+   Brushed DC Motor Control
    Using Wemos D1 Mini
 
    Project is a monster box. The motor slightly opens the box periodically
@@ -13,12 +13,10 @@
 #define TENSEC 10000
 #define FIVESEC 5000
 
-const int motorPin = D1;                  //Controls the motor. (red)
-const int startSwitch = D2;               //Starts the motor. (blue)
-const int closedSwitch = D3;              //Limit pin, stops the motor. (orange)
-const int openSwitch = D4;                //Limit pin, stops the motor. (yellow)
-const int ledPin = D5;                    //Control for the LED "eyes". (green)
-const int tailPin = D6;                   //Control for the tail movement. (violet)
+const int motorPin = D3;                  //Controls the motor. (violet)
+const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
+const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
+const int buttonPin = D4;
 
 const long int Minutes = 60000;           //ms per minute
 const long int Seconds = 1000;            //ms per second
@@ -27,7 +25,6 @@ const int MIN_PWM = 200;                  //Anything lower and the motor won't s
 int motorPwm = MIN_PWM;                   //PWM value for motor on.
 int lidState;
 int bounceCount = 0;
-int motorState = 0;
 
 
 
@@ -65,7 +62,7 @@ const int mqttPort = 1883;
 
 
 //--------------- ticker ---------------
-const int BLUE_LED_PIN = LED_BUILTIN;    //D4 is LED_BUILTIN on Wemos D1 Mini
+const int BLUE_LED_PIN = D7;             //D4 is LED_BUILTIN on Wemos D1 Mini
 //for LED status
 #include <Ticker.h>
 Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED

@@ -3,12 +3,20 @@ void loop() {
   ArduinoOTA.handle();
   mqttReconnect();         //Make sure we stay connected to the mqtt broker
   menu();
-  
-  closeTheLid();
-  delay(FIVESEC);
-  openTheLid();
-  delay(FIVESEC);
 
+  int i = digitalRead(buttonPin);
+  if (i == 0) {
+    slowOpen();
+    delay(1000);
+    slowClose();
+  }
+
+  /*
+    closeTheLid();
+    delay(FIVESEC);
+    openTheLid();
+    delay(FIVESEC);
+  */
   /*
     closeTheLid();
     delay(6000);

@@ -29,14 +29,14 @@ void menu() {
     }
 
     if (c == '3') {
-      Serial.println(F("2- Slow open-close"));
-      //slowWag(1);
+      Serial.println(F("2- Slow open"));
+      slowOpen();
       c = '0';
     }
 
     if (c == '4') {
-      Serial.println(F("2- Fast open-close"));
-      //slowWag(1);
+      Serial.println(F("2- Slow close"));
+      slowClose();
       c = '0';
     }
   }
