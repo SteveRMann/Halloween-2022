@@ -1,5 +1,5 @@
-#define SKETCH "Lid"
-#define VERSION "6.2"
+#define SKETCH "lid"
+#define VERSION "6.3"
 
 /*
    Brushed DC Motor Control

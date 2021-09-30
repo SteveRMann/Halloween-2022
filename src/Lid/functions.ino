@@ -43,6 +43,7 @@ void openTheLid() {
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
   Serial.println(F("OPEN"));
+  client.publish (statusTopic, "Open");
 }
 
 
@@ -54,6 +55,7 @@ void slowOpen() {
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
   Serial.println(F("OPEN"));
+  client.publish (statusTopic, "Open");
 }
 
 
@@ -65,6 +67,7 @@ void fastOpen() {
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
   Serial.println(F("OPEN"));
+  client.publish (statusTopic, "Open");
 }
 
 // ---------- Close the lid ----------
@@ -75,6 +78,7 @@ void closeTheLid() {
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
   Serial.println(F("CLOSED"));
+  client.publish (statusTopic, "Closed");
 }
 
 // ---------- Slow close the lid ----------
@@ -85,6 +89,7 @@ void slowClose() {
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.print(F("motor off"));
   Serial.println(F("CLOSED"));
+  client.publish (statusTopic, "Closed");
 }
 
 
@@ -96,4 +101,28 @@ void motorOn() {
   flagMotorOn = true;
   lidState += 1;
   if (lidState > 2) lidState = 0;
+}
+
+//=============== eyesOn ===============
+void eyesOn() {
+  digitalWrite(LEDS_PIN, 1);
+  client.publish (statusTopic, "Eyes On");
+}
+
+//=============== eyesOff ===============
+void eyesOff() {
+  digitalWrite(LEDS_PIN, 0);
+  client.publish (statusTopic, "Eyes Off");
+}
+
+//=============== fanOn ===============
+void fanOn() {
+  analogWrite(FAN_PIN, 250);
+  client.publish (statusTopic, "Fan On");
+}
+
+//=============== fanOff ===============
+void fanOff() {
+  analogWrite(FAN_PIN, 0);
+  client.publish (statusTopic, "Fan Off");
 }

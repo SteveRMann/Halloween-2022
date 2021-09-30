@@ -16,6 +16,7 @@ void setup() {
   mqttConnect();
 
   Serial.println(F("---------- Starting ----------"));
+  client.publish (statusTopic, "Starting");
 
   lidState = 0;     //Open
   drawMenu();
@@ -30,4 +31,9 @@ void setup() {
   analogWrite(FAN_PIN, 250);
   delay(2000);
   analogWrite(FAN_PIN, 0);
+
+  //Lid
+  slowOpen();
+  delay(1000);
+  slowClose();
 }

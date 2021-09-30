@@ -17,7 +17,6 @@ void setup_mqtt() {
 
 // ==================================  mqttReconnect ==================================
 void mqttReconnect() {
-  //mqttConnect
   //Make sure we stay connected to the mqtt broker
   if (!client.connected()) {
     mqttConnect();
@@ -26,6 +25,7 @@ void mqttReconnect() {
     client.connect(hostName);
   }
 }
+
 
 // ==================================  mqttConnect ==================================
 void mqttConnect() {
@@ -122,13 +122,28 @@ void callback(String topic, byte * payload, unsigned int length) {
       digitalWrite(LEDS_PIN, 0);
     }
 
+    if (!strcmp(message, "slowopen")) {
+      //Open the lid
+      Serial.println(F("Open the lid"));
+      slowOpen();
+    }
+
+    if (!strcmp(message, "slowclose")) {
+      //Close the lid
+      Serial.println(F("Close the lid"));
+      slowClose();
+    }
+
     if (!strcmp(message, "help")) {
+      client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff slowopen slowclose");
       //Print the available commands
-      Serial.println(F("Commands:"));
+      //Serial.println(F("Commands: "));
       //Serial.println(F("fanOn -  Turn on the mist fan."));
       //Serial.println(F("fanOff - Turn off the mist fan."));
       //Serial.println(F("eyesOn - Turn on the eyes LEDs."));
-      //Serial.println(F("eyesOff- Turn off the eyes LEDs."));
+      //Serial.println(F("eyesOff - Turn off the eyes LEDs."));
+      //Serial.println(F("slowOpen - Open the lid."));
+      //Serial.println(F("slowClose - Close the lid."));
     }
 
   }

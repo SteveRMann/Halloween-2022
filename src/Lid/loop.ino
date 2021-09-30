@@ -6,9 +6,13 @@ void loop() {
 
   int i = digitalRead(buttonPin);
   if (i == 0) {
+    eyesOn();
+    fanOn();
     slowOpen();
     delay(1000);
     slowClose();
+    eyesOff();
+    fanOff();
   }
 
   /*
