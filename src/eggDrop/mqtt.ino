@@ -1,50 +1,3 @@
-
-/* ================================== mqttConnect() =================================
-  Include at the top of the main ino file:
-
-  //--------------- MQTT declarations ---------------
-  #include <ESP8266WiFi.h>        // Connect (and reconnect) an ESP8266 to the a WiFi network.
-  #include <PubSubClient.h>       // connect to a MQTT broker and publish/subscribe messages in topics.
-  // Declare an object of class WiFiClient, which allows to establish a connection to a specific IP and port
-  // Declare an object of class PubSubClient, which receives as input of the constructor the previously defined WiFiClient.
-  // The constructor MUST be unique on the network. (Does it?)
-  WiFiClient xyzzy;
-  PubSubClient client(xyzzy);
-
-  // Declare strings for the topics. Topics will be created in setup_mqtt().
-  char statusTopic[20];
-  char cmndTopic[20];                           // Incoming commands, payload is a command.
-  char rssiTopic[20];
-  // Other topics as needed
-
-  const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
-  const int mqttPort = 1883;
-  //--------------- End of MQTT declarations ---------------
-
-
-
-  // --------------- Example setup: ---------------
-  void setup() {
-    beginSerial();
-    setup_wifi();                   // MUST be before setupMqtt()
-    start_OTA();                    // Ifusing OTA
-    setup_mqtt();                   // Generate the topics
-
-    // Call the setServer method on the PubSubClient object
-    client.setServer(mqttServer, mqttPort);
-    mqttConnect();
-  //-------------------------------------------------
-
-
-
-  //----------
-  //IN LOOP()
-  mqttReconnect();         //Make sure we stay connected to the mqtt broker
-
-*/
-
-
-
 // ==================================  setup_mqtt ==================================
 // Create topic names
 void setup_mqtt() {
@@ -99,41 +52,11 @@ void mqttConnect() {
 
 
 
+
 // ==================================  mqtt callback ==================================
-/*
-  This function is executed when some device publishes a message to a topic that this
-  ESP8266 is subscribed to.  The payload is case-sensitive.
-*/
-/*******
-  void callback(String topic, byte * message, unsigned int length) {
-
-  Serial.println();
-  Serial.print(F("Message arrived on topic: "));
-  Serial.println(topic);
-
-
-  // Convert the character array to a string
-  String messageString;
-  for (unsigned int i = 0; i < length; i++) {
-    messageString += (char)message[i];
-  }
-  messageString.trim();
-  messageString.toUpperCase();          //Make the string upper-case
-
-
-  Serial.print("messageString: ");
-  Serial.print(messageString);
-  Serial.println();
-
-
-
-  if (topic == cmndTopic) {
-    //Handle the command
-  }
-*******/
-// ==================================  mqtt callback ==================================
-// This function is executed when some device publishes a message to a topic that this ESP8266 is subscribed to.
-// The MQTT payload is the filename of the message to play when the phone is picked up.  The payload is case-sensitive.
+// This function is executed when some device publishes a message to a topic that this
+// ESP8266 is subscribed to.
+// The payload is case-sensitive.
 //
 void callback(String topic, byte * payload, unsigned int length) {
   char message[length + 1];
@@ -145,7 +68,8 @@ void callback(String topic, byte * payload, unsigned int length) {
 
   // Sometimes in the MQTT tool, I accdentally hit "Enter" on my keyboard.
   // This removes it.
-  for (int i = 0; i == strlen(message); i++) {
+  //for (int i = 0; i == strlen(message); i++) {
+  for (size_t i = 0; i == strlen(message); i++) {
     if (message[i] == 10) {
       message[i] = '\0';
       break;
@@ -207,7 +131,6 @@ void callback(String topic, byte * payload, unsigned int length) {
       //stressFlag = true;
       //stress();
     }
-
   }
 
 } //callback
