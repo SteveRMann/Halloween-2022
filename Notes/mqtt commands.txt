@@ -1,4 +1,4 @@
-MATT commands
+MQTT commands
 
 tail/cmnd
   wag
@@ -7,4 +7,15 @@ tail/cmnd
   slowWag
   
 lid/cmnd
+  fanOn
+  fanOff
+  eyesOn
+  eyesOff
+  slowOpen
+  slowClose
   
+eggDrop/cmnd
+  reset
+  flush
+  drop
+  stress  
