@@ -8,30 +8,10 @@ void loop() {
   if (i == 0) {
     eyesOn();
     fanOn();
-    slowOpen();
+    openTheLid();
     delay(1000);
-    slowClose();
+    closeTheLid();
     eyesOff();
     fanOff();
   }
-
-  /*
-    closeTheLid();
-    delay(FIVESEC);
-    openTheLid();
-    delay(FIVESEC);
-  */
-  /*
-    closeTheLid();
-    delay(6000);
-
-    //Thrash the lid
-    motorPwm = 200;                   //Fast
-    for (int i = 0; i < 5; i++) {
-    openTheLid();
-    closeTheLid();
-    }
-    motorPwm = MIN_PWM;               //Default speed
-    delay(15000);
-  */
 }

@@ -27,45 +27,23 @@ void beginSerial() {
 // ========= Start the motor =========
 void startTheMotor() {
   Serial.println(F("motor on"));
-  analogWrite(motorPin, motorPwm);            //Turn on the motor to motorPwm
+  analogWrite(motorPin, 255);                 //Turn on the motor
   delay(100);                                 //Give the motor time to move past the stop switch.
-  Serial.print(F("openSwitch= "));
-  Serial.println(digitalRead(openSwitch));
-  Serial.print(F("closedSwitch= "));
-  Serial.println(digitalRead(closedSwitch));
+  /*
+    Serial.print(F("Limit Switches (open,close)= ("));
+    Serial.print(digitalRead(openSwitch));
+    Serial.print(F("), ("));
+    Serial.print(digitalRead(closedSwitch));
+    Serial.print(F(")"));
+  */
 }
 
 // ---------- Open the lid ----------
 void openTheLid() {
   startTheMotor();
-  analogWrite(motorPin, 100);        //Slow it down
+  analogWrite(motorPin, 200);        //Slow it down
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
-  Serial.println(F("OPEN"));
-  client.publish (statusTopic, "Open");
-}
-
-
-// ---------- Slow Open the lid ----------
-void slowOpen() {
-  startTheMotor();
-  analogWrite(motorPin, 80);                  //Slow it down
-  while (digitalRead(openSwitch)) yield();    //Wait for the open switch closes (==0)
-  analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
-  Serial.println(F("OPEN"));
-  client.publish (statusTopic, "Open");
-}
-
-
-// ---------- Fast Open the lid ----------
-void fastOpen() {
-  startTheMotor();
-  analogWrite(motorPin, 250);                 //Speed it up
-  while (digitalRead(openSwitch)) yield();    //Wait for the open switch closes (==0)
-  analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
   Serial.println(F("OPEN"));
   client.publish (statusTopic, "Open");
 }
@@ -73,35 +51,13 @@ void fastOpen() {
 // ---------- Close the lid ----------
 void closeTheLid() {
   startTheMotor();
-  analogWrite(motorPin, 100);        //Slow it down
+  analogWrite(motorPin, 200);        //Slow it down
   while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
   Serial.println(F("CLOSED"));
   client.publish (statusTopic, "Closed");
 }
 
-// ---------- Slow close the lid ----------
-void slowClose() {
-  startTheMotor();
-  analogWrite(motorPin, 80);        //Slow it down
-  while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
-  analogWrite(motorPin, 0);                   //Stop the motor
-  Serial.print(F("motor off"));
-  Serial.println(F("CLOSED"));
-  client.publish (statusTopic, "Closed");
-}
-
-
-
-//=============== motorOn ===============
-//Function called by the ticker.
-void motorOn() {
-  //Serial.println(F("Tick"));
-  flagMotorOn = true;
-  lidState += 1;
-  if (lidState > 2) lidState = 0;
-}
 
 //=============== eyesOn ===============
 void eyesOn() {

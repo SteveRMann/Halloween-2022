@@ -122,28 +122,36 @@ void callback(String topic, byte * payload, unsigned int length) {
       digitalWrite(LEDS_PIN, 0);
     }
 
-    if (!strcmp(message, "slowopen")) {
+    if (!strcmp(message, "open")) {
       //Open the lid
       Serial.println(F("Open the lid"));
-      slowOpen();
+      openTheLid();
     }
 
-    if (!strcmp(message, "slowclose")) {
+    if (!strcmp(message, "close")) {
       //Close the lid
       Serial.println(F("Close the lid"));
-      slowClose();
+      closeTheLid();
+    }
+
+    if (!strcmp(message, "openclose")) {
+      //Close the lid
+      openTheLid();
+      delay(250);
+      closeTheLid();
     }
 
     if (!strcmp(message, "help")) {
-      client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff slowopen slowclose");
+      client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff open close");
       //Print the available commands
       //Serial.println(F("Commands: "));
       //Serial.println(F("fanOn -  Turn on the mist fan."));
       //Serial.println(F("fanOff - Turn off the mist fan."));
       //Serial.println(F("eyesOn - Turn on the eyes LEDs."));
       //Serial.println(F("eyesOff - Turn off the eyes LEDs."));
-      //Serial.println(F("slowOpen - Open the lid."));
-      //Serial.println(F("slowClose - Close the lid."));
+      //Serial.println(F("open - Open the lid."));
+      //Serial.println(F("close - Close the lid."));
+      //Serial.println(F("Open and Close the lid."));
     }
 
   }

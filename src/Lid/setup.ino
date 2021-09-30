@@ -24,8 +24,8 @@ void setup() {
   //Testing D5 LEDs (yellow) and D6 FAN (green)
   eyesTicker.attach(0.1, eyesTick);          // Start eyesTick
   delay(1000);
-    eyesTicker.detach();
-    delay(550);
+  eyesTicker.detach();
+  delay(550);
 
   //Fan
   analogWrite(FAN_PIN, 250);
@@ -33,7 +33,7 @@ void setup() {
   analogWrite(FAN_PIN, 0);
 
   //Lid
-  slowOpen();
+  openTheLid();
   delay(1000);
-  slowClose();
+  closeTheLid();
 }
