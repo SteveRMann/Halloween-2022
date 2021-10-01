@@ -10,12 +10,14 @@ void setup() {
   Serial.println();
   Serial.println();
   Serial.print(F("dfplayer_gpio.ino"));
-  
-  pinMode(D5, OUTPUT);
-  digitalWrite(D5, 1);
-  digitalWrite(D6, 1);
-  digitalWrite(D7, 1);
-  digitalWrite(D8, 1);
+
+  pinMode(D5, INPUT);                 //This makes the GPIO pins float.
+  pinMode(D6, INPUT);
+  pinMode(D7, INPUT);
+  pinMode(D8, INPUT);
+  pinMode(D1, INPUT);
+  pinMode(D2, INPUT);
+  pinMode(D3, INPUT);
   drawMenu();
 }
 
