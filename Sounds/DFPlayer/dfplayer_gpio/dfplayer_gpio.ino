@@ -5,7 +5,7 @@
 
 // ---------- setup ----------
 void setup() {
-   Serial.begin(115200);
+  Serial.begin(115200);
   delay(1);
   Serial.println();
   Serial.println();
