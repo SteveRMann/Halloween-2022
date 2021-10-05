@@ -1,8 +1,0 @@
-PLayRandom and PlayMP3 worked after reformatting the SD card as FAT32.
-
-The PlayRandom.ino sketch helped me figure out the file structure and that the SD card had to be reformatted.
-As a stand-alone MP3 player, the sound effects mp3 played just fine.
-
-file:///D:/Downloads/DFPlayer%20Mini%20Manual%20(1).pdf
-Figure 4.3 is the setup I used.
-
