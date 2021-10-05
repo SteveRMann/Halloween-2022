@@ -4435,7 +4435,7 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 <part name="X_1" library="ngspice-simulation" library_urn="urn:adsk.eagle:library:527439" deviceset="GND" device=""/>
 <part name="FRAME1" library="myParts" deviceset="LETTER_L" device=""/>
 <part name="W1" library="diy-modules" deviceset="WEMOS-D1-MINI" device=""/>
-<part name="R4" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:6240597/1" value="51K"/>
+<part name="R1" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:6240597/1" value="3K"/>
 <part name="JP2" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="PINHD-1X3" device="" package3d_urn="urn:adsk.eagle:package:6240710/1" value="Audio Out"/>
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2" value="Power In"/>
 <part name="U$1" library="diy-modules" deviceset="DFPLAYER-MINI-MODULE" device=""/>
@@ -4455,7 +4455,7 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 <text x="118.364" y="70.104" size="1.778" layer="95" rot="R90">Next/Vol+</text>
 <text x="113.284" y="70.104" size="1.778" layer="95" rot="R90">Prev/Vol-</text>
 <text x="123.444" y="70.104" size="1.778" layer="95" rot="R90">Track 1</text>
-<text x="128.524" y="70.104" size="1.778" layer="95" rot="R90">Loop</text>
+<text x="128.524" y="70.104" size="1.778" layer="95" rot="R90">Track 2</text>
 <text x="133.604" y="70.104" size="1.778" layer="95" rot="R90">Play/Pause</text>
 <text x="208.534" y="131.318" size="1.778" layer="95">Gnd</text>
 <text x="208.534" y="128.778" size="1.778" layer="95">Left (tip)</text>
@@ -4475,7 +4475,7 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 <attribute name="NAME" x="93.98" y="104.14" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="93.98" y="106.68" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="R4" gate="G$1" x="129.54" y="95.25" smashed="yes" rot="R90">
+<instance part="R1" gate="G$1" x="129.54" y="95.25" smashed="yes" rot="R90">
 <attribute name="NAME" x="133.1214" y="91.44" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="132.842" y="96.52" size="1.778" layer="96" rot="R90"/>
 </instance>
@@ -4622,15 +4622,21 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 <net name="N$8" class="0">
 <segment>
 <pinref part="S6" gate="G$1" pin="1"/>
-<pinref part="R4" gate="G$1" pin="1"/>
-<wire x1="129.54" y1="78.74" x2="129.54" y2="90.17" width="0.1524" layer="91"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="129.54" y1="78.74" x2="129.54" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="W1" gate="G$1" pin="D3"/>
+<wire x1="129.54" y1="83.82" x2="129.54" y2="90.17" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="129.54" x2="53.34" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="129.54" x2="53.34" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="83.82" x2="129.54" y2="83.82" width="0.1524" layer="91"/>
+<junction x="129.54" y="83.82"/>
 </segment>
 </net>
 <net name="N$13" class="0">
 <segment>
 <pinref part="S4" gate="G$1" pin="1"/>
 <wire x1="124.46" y1="104.14" x2="124.46" y2="78.74" width="0.1524" layer="91"/>
-<pinref part="R4" gate="G$1" pin="2"/>
+<pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="129.54" y1="100.33" x2="129.54" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="134.62" y1="100.33" x2="134.62" y2="104.14" width="0.1524" layer="91"/>
