@@ -1,5 +1,7 @@
 #define SKETCH "dfplayer"
-#define VERSION "1.0"
+#define VERSION "1.1"
+// Version 1.1- Added MQTT, WiFi and OTA
+
 
 /*
   Control the DFPlayer ADKEY1 pin through a GPIO port.
