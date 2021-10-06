@@ -92,3 +92,21 @@ void stress() {
     lastTimeChecked = millis();
   }
 }
+
+// ---------- button functions ----------
+void singleClick() {
+  //Drop one egg
+  dropEgg(1);
+}
+
+void doubleclick() {
+  //Flush-Open both servos.
+  dropServoOpen();
+  loadServoOpen();
+}
+
+void longPress() {
+  //Reset-Close both servos
+  dropServoClose();
+  loadServoClose();
+}

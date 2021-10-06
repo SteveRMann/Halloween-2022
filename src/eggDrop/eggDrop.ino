@@ -60,9 +60,16 @@ char rssiTopic[20];
 const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
 const int mqttPort = 1883;
 
+
+// --------------- button declarations ---------------
+#include "OneButton.h"
+OneButton button(BUTTON_PIN);
+
+
+// --------------- Global stuff ---------------
 const int eyesMax = 255;
 const int eyesMin = 25;
-int eyes = 100;                       //Eyes intensity
+int eyes = eyesMin;                    //Eyes intensity
 long int blink = 0;
 
 
@@ -84,6 +91,10 @@ void setup() {
   client.setServer(mqttServer, mqttPort);
   mqttConnect();
 
+  //Buttons
+  button.attachDoubleClick(doubleclick);
+  button.attachClick(singleClick);
+  button.attachLongPressStop(longPress);
 
   /*
     Specs in https://www.servocity.com/hs-645mg-servo/
@@ -126,24 +137,28 @@ void setup() {
 void loop() {
   ArduinoOTA.handle();
   mqttReconnect();         //Make sure we stay connected to the mqtt broker
+  button.tick();
   loopMillis = millis();
 
   if (stressFlag) stress();
-  int i = digitalRead(BUTTON_PIN);
-  if (i == 0) dropEgg(1);
 
+  //int i = digitalRead(BUTTON_PIN);
+  //if (i == 0) dropEgg(1);
+
+  //Fade the eyes
   if (eyes > eyesMin) {
     eyes -= 1;
     analogWrite(EYES_PIN, eyes);
     delay(10);
   }
 
+  //Blink the eyes
   if (blink > 0) {
     blink -= 1;
     delay(1);
   } else {
     analogWrite(EYES_PIN, 0);
-    delay(random(90,200));
+    delay(random(90, 200));
     analogWrite(EYES_PIN, eyes);
     blink = random(3000, 9000);        //Blink every 3 to 9 seconds
   }
