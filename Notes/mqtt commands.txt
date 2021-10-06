@@ -19,3 +19,16 @@ eggDrop/cmnd
   flush
   drop
   stress  
+  
+dfplayer/cmnd
+  play1
+  play2
+  loop1
+  loop2
+  pause
+  play
+  prev
+  next
+  volup
+  voldn
+  
