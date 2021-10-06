@@ -17,7 +17,6 @@ void setup_wifi() {
   //WiFi.enableInsecureWEP();
   WiFi.begin(MY_SSID, MY_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
-    //Blink the WiFi status LED
     blueTicker.attach(0.1, blueTick);        // Start blueTick() while we connect
     delay(500);
     Serial.print(WiFi.status()); Serial.print(F(" "));
