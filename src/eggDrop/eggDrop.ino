@@ -1,5 +1,6 @@
 #define SKETCH "eggDrop"
-#define VERSION "2.0"
+#define VERSION "2.1"
+//Version 2.1 - added Blink
 
 const int servo1Pin = D1;           //Drop servo
 const int servo2Pin = D2;           //Preload servo
@@ -62,6 +63,9 @@ const int mqttPort = 1883;
 const int eyesMax = 255;
 const int eyesMin = 25;
 int eyes = 100;                       //Eyes intensity
+long int blink = 0;
+
+
 
 // -------------- setup() --------------
 void setup() {
@@ -133,4 +137,15 @@ void loop() {
     analogWrite(EYES_PIN, eyes);
     delay(10);
   }
+
+  if (blink > 0) {
+    blink -= 1;
+    delay(1);
+  } else {
+    analogWrite(EYES_PIN, 0);
+    delay(random(90,200));
+    analogWrite(EYES_PIN, eyes);
+    blink = random(3000, 9000);        //Blink every 3 to 9 seconds
+  }
+
 }
