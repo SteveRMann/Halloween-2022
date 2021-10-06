@@ -1,6 +1,6 @@
 #define SKETCH "dfplayer"
-#define VERSION "1.1"
-// Version 1.1- Added MQTT, WiFi and OTA
+#define VERSION "1.2"
+// Version 1.2- Added MQTT Callbacks
 
 
 /*

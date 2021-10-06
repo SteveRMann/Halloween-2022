@@ -104,32 +104,24 @@ void callback(String topic, byte * payload, unsigned int length) {
 
     if (!strcmp(message, "reset")) {
       //Close both servos.
-      Serial.println(F("Close both servos"));
       dropServoClose();
       loadServoClose();
     }
 
     if (!strcmp(message, "flush")) {     // if message=="flush", then strcmp returns a zero (false).
       //Open both servos.
-      Serial.println(F("Open both servos"));
       dropServoOpen();
       loadServoOpen();
     }
 
     if (!strcmp(message, "drop")) {
       //Drop one egg
-      Serial.println(F("Drop one egg"));
       dropEgg(1);
     }
 
     if (!strcmp(message, "stress")) {
       //Drop an egg every 30-seconds.
-      Serial.println(F("Drop an egg every 30-seconds."));
       stressFlag = true;
-      //  lastTimeChecked = millis();
-
-      //stressFlag = true;
-      //stress();
     }
   }
 

@@ -22,4 +22,6 @@ void setup() {
   pulse(PLAY_PAUSE_PIN);                //Always start here?
   delay(1000);
   hold(TRACK1_PIN);                     //Loop track 1
+  delay(2000);
+  pulse(PLAY_PAUSE_PIN);
 }

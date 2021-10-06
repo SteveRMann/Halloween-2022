@@ -7,6 +7,7 @@ const int servo1LedPin = D3;
 const int servo2LedPin = D4;
 const int BUTTON_PIN = D5;
 const int BLUE_LED_PIN = D6;
+const int EYES_PIN = D7;
 
 bool stressFlag = false;
 const int STRESS_PERIOD = 10000;    //How long between stress cycles
@@ -58,12 +59,15 @@ char rssiTopic[20];
 const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
 const int mqttPort = 1883;
 
-
+const int eyesMax = 255;
+const int eyesMin = 25;
+int eyes = 100;                       //Eyes intensity
 
 // -------------- setup() --------------
 void setup() {
   pinMode(servo1LedPin, OUTPUT);
   pinMode(servo2LedPin, OUTPUT);
+  pinMode(EYES_PIN, OUTPUT);
   pinMode(BLUE_LED_PIN, OUTPUT);      // Must be before calling setup_wifi
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
@@ -96,6 +100,20 @@ void setup() {
   //digitalWrite(BLUE_LED_PIN, ledON);
   analogWrite(BLUE_LED_PIN, 50);            //Leave it on, but dim.
 
+
+  //Cycle through the eyes' LED intensity.
+  for (int j = 0; j < 4; j++) {
+    for (int i = 10; i < 255; i++) {
+      analogWrite(EYES_PIN, i);
+      delay(2);
+    }
+    for (int i = 255; i > 10; i--) {
+      analogWrite(EYES_PIN, i);
+      delay(2);
+    }
+  }
+  eyes = eyesMin;
+  analogWrite(EYES_PIN, eyes);
   delay(1000);
 }
 
@@ -109,97 +127,10 @@ void loop() {
   if (stressFlag) stress();
   int i = digitalRead(BUTTON_PIN);
   if (i == 0) dropEgg(1);
-}
 
-
-// -------------- dropEgg() --------------
-void dropEgg(int howMany) {
-  printf("\nDropping\n");
-  if (servo1Position != 90) {            //Make sure we're closed.
-    dropServoClose();
-    loadServoClose();
-    delay(500);
+  if (eyes > eyesMin) {
+    eyes -= 1;
+    analogWrite(EYES_PIN, eyes);
+    delay(10);
   }
-  while (howMany > 0) {
-    howMany--;
-    printf(" egg# %d.\n", howMany);
-    dropServoOpen();                            //Exit
-    digitalWrite (servo1LedPin, ledON);
-    delay(dropDelay);
-    dropServoClose();
-    digitalWrite (servo1LedPin, ledOFF);
-    delay(dropDelay);                   //Let 'drop' close before 'load' opens
-
-
-    loadServoOpen();                            //Load
-    digitalWrite (servo2LedPin, ledON);
-    delay(loadDelay);
-    loadServoClose();
-    digitalWrite (servo2LedPin, ledOFF);
-
-    delay(2000);                     //Time between eggs
-  }
-}
-
-// -------------- dropServoOpen() --------------
-void dropServoOpen() {                          //Open the exit
-  servoOne.write(0);
-  servo1Position = 0;
-}
-
-// -------------- dropServoClose() --------------
-void dropServoClose() {                         //Close the exit
-  servoOne.write(90);
-  servo1Position = 90;
-}
-
-// -------------- loadServoOpen() --------------
-void loadServoOpen() {                          //Open the preload servo
-  servoTwo.write(0);
-  servo2Position = 0;
-}
-
-// -------------- loadServoClose() --------------
-void loadServoClose() {                         //Close the preload
-  servoTwo.write(90);
-  servo2Position = 90;
-}
-
-// -------------- stress() --------------
-void stress() {
-  //Drop an egg every STRESS_PERIOD
-  if (millis() - lastTimeChecked >= STRESS_PERIOD) {
-    dropEgg(1);
-    lastTimeChecked = millis();
-  }
-}
-
-
-// -------------- beginSerial() --------------
-void beginSerial() {
-  while (!Serial);
-  Serial.begin( 115200 );
-  Serial.println();
-  Serial.println();
-  Serial.print(SKETCH);
-  Serial.print(".ino, Version ");
-  Serial.println(VERSION);
-  Serial.println(F("++++++++++++++++++ +"));
-}
-
-// *********** Function to display a string for debugging. ***********
-void dbugs(const char *s, const char *v) {
-  //Show a string variable. Enter with the string description and the string.
-  //Example dbugs("My String= ",myString);
-  Serial.print(s);
-  Serial.print (F("\""));
-  Serial.print(v);
-  Serial.println(F("\""));
-}
-
-// *********** Function to blink the WiFi status LED ***********
-void blueTick() {
-  //toggle state
-  int state = digitalRead(BLUE_LED_PIN);            // get the current state of GPIO pin
-  digitalWrite(BLUE_LED_PIN, !state);               // set pin to the opposite state
 }

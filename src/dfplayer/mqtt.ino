@@ -98,13 +98,56 @@ void callback(String topic, byte * payload, unsigned int length) {
     Serial.print(message);
     Serial.println(F("'"));
 
-    //Sample handling of a command
-    if (!strcmp(message, "reset")) {
-      //Close both servos.
-      Serial.println(F("Close both servos"));
-      //dropServoClose();
-      //loadServoClose();
+    if (!strcmp(message, "play1")) {
+      Serial.println(F("Play Track One"));
+      pulse(TRACK1_PIN);
     }
+
+    if (!strcmp(message, "loop1")) {
+      Serial.println(F("Loop Track One"));
+      hold(TRACK1_PIN);
+    }
+
+    if (!strcmp(message, "play2")) {
+      Serial.println(F("Play Track Two"));
+      pulse(TRACK2_PIN);
+    }
+
+    if (!strcmp(message, "loop2")) {
+      Serial.println(F("Loop Track Two"));
+      hold(TRACK2_PIN);
+    }
+
+    if (!strcmp(message, "play")) {
+      Serial.println(F("Play/Pause"));
+      pulse(PLAY_PAUSE_PIN);
+    }
+
+    if (!strcmp(message, "pause")) {
+      Serial.println(F("Play/Pause"));
+      pulse(PLAY_PAUSE_PIN);
+    }
+
+    if (!strcmp(message, "prev")) {
+      Serial.println(F("Previous"));
+      pulse(PREV_VOLdn_PIN);
+    }
+
+    if (!strcmp(message, "next")) {
+      Serial.println(F("Next"));
+      pulse(NEXT_VOLup_PIN);
+    }
+
+    if (!strcmp(message, "volup")) {
+      Serial.println(F("Volume Up"));
+      hold(NEXT_VOLup_PIN);
+    }
+
+    if (!strcmp(message, "voldn")) {
+      Serial.println(F("Volume Down"));
+      hold(PREV_VOLdn_PIN);
+    }
+
 
   }
 } //callback
