@@ -32,3 +32,6 @@ dfplayer/cmnd
   volup
   voldn
   
+syncTopic,"lid/cmnd/sync"
+  Subscribed to in dfplayer
+  
