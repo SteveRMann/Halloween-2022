@@ -1,6 +1,6 @@
 #define SKETCH "dfplayer"
-#define VERSION "1.2"
-// Version 1.2- Added MQTT Callbacks
+#define VERSION "1.3"
+// Version 1.3- Added syncTopic (lid/cmnd/sync)
 
 
 /*
