@@ -48,6 +48,8 @@ const int mqttPort = 1883;
 char statusTopic[20];
 char cmndTopic[20];
 char rssiTopic[20];
+char syncTopic[20];
+
 
 //--------------- OTA declarations ---------------
 #include <ArduinoOTA.h>

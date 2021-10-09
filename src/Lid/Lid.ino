@@ -1,5 +1,6 @@
 #define SKETCH "lid"
-#define VERSION "6.3"
+#define VERSION "6.4"
+//Version 6.4 added button.h functions
 
 /*
    Brushed DC Motor Control
@@ -16,9 +17,9 @@
 const int motorPin = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
-const int buttonPin = D4;
+//const int buttonPin = D4;
 const int LEDS_PIN = D5;
-const int FAN_PIN = D6;            
+const int FAN_PIN = D6;
 
 const long int Minutes = 60000;           //ms per minute
 const long int Seconds = 1000;            //ms per second
@@ -28,6 +29,11 @@ int motorPwm = MIN_PWM;                   //PWM value for motor on.
 int lidState;
 int bounceCount = 0;
 
+
+// --------------- button declarations ---------------
+const int BUTTON_PIN = D4;
+#include "OneButton.h"
+OneButton button(BUTTON_PIN);
 
 
 //--------------- WiFi declarations ---------------
@@ -69,3 +75,23 @@ const int BLUE_LED_PIN = D7;             //D4 is LED_BUILTIN on Wemos D1 Mini
 #include <Ticker.h>
 Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED
 Ticker eyesTicker;           //Testing
+
+//--------------- lid timing ---------------
+/* This is the timing of opens (even) and closes (odds).
+  The numbers are millisceonds from the start of track1.mp3
+  as played from dfplayer.ino.
+  The sequence is started when an MQTT message is received
+  on topic: lid/cmnd/sync
+*/
+const int T0 = 0;
+const int T1 = 4862;
+const int T2 = 5965;
+const int T3 = 9517;
+const int T4 = 9965;
+const int T5 = 16862;
+const int T6 = 17793;
+const int T7 = 21586;
+const int T8 = 22275;
+const int T9 = 23000;
+const int T10 = 23965;
+const int T11 = 25000;

@@ -141,6 +141,34 @@ void callback(String topic, byte * payload, unsigned int length) {
       closeTheLid();
     }
 
+    if (!strcmp(message, "sync")) {
+      //Start the open/close sequence.
+      openTheLid();
+      delay(T1 - T0);
+      closeTheLid();
+      delay(T2 - T1);
+      openTheLid();
+      delay(T3 - T2);
+      closeTheLid();
+      delay(T4 - T3);
+      openTheLid();
+      delay(T5 - T4);
+      closeTheLid();
+      delay(T6 - T5);
+      openTheLid();
+      delay(T7 - T6);
+      closeTheLid();
+      delay(T8 - T7);
+      openTheLid();
+      delay(T9 - T8);
+      closeTheLid();
+      delay(T10 - T9);
+      openTheLid();
+      delay(T11 - T10);
+      closeTheLid();
+    }
+
+
     if (!strcmp(message, "help")) {
       client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff open close");
       //Print the available commands

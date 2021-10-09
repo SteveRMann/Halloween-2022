@@ -71,19 +71,6 @@ void menu() {
 }
 
 
-void pulse(int d) {
-  pinMode(d, OUTPUT);
-  digitalWrite(d, 0);
-  delay(100);
-  pinMode(d, INPUT);
-}
-
-void hold(int d) {
-  pinMode(d, OUTPUT);
-  digitalWrite(d, 0);
-  delay(2000);
-  pinMode(d, INPUT);
-}
 
 
 void drawMenu() {

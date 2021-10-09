@@ -82,3 +82,35 @@ void fanOff() {
   analogWrite(FAN_PIN, 0);
   client.publish (statusTopic, "Fan Off");
 }
+
+
+// ---------- button functions ----------
+void singleClick() {
+  Serial.println(F("singleClick"));
+  //Open the lid for one second
+  eyesOn();
+  fanOn();
+  openTheLid();
+  delay(1000);
+  closeTheLid();
+  eyesOff();
+  fanOff();
+}
+
+void doubleclick() {
+  Serial.println(F("doubleClick"));
+}
+
+void longPress() {
+  Serial.println(F("longPress"));
+  //Mayhem
+  eyesOn();
+  fanOn();
+  for (int i = 0; i < 10; i++) {
+    openTheLid();
+    delay(100);
+    closeTheLid();
+  }
+  eyesOff();
+  fanOff();
+}

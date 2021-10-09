@@ -16,10 +16,10 @@ void setup_wifi() {
   WiFi.mode(WIFI_STA);
   //WiFi.enableInsecureWEP();
   WiFi.begin(MY_SSID, MY_PASSWORD);
+  blueTicker.attach(0.1, blueTick);        // Start blueTick() while we connect
   while (WiFi.status() != WL_CONNECTED) {
-    blueTicker.attach(0.1, blueTick);        // Start blueTick() while we connect
-    delay(500);
     Serial.print(WiFi.status()); Serial.print(F(" "));
+    delay(500);
   }
   blueTicker.detach();                     // Stop blueTick()
   Serial.println(F("\nWiFi connected, "));
