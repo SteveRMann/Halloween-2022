@@ -43,20 +43,12 @@ void dropEgg(int howMany) {
   while (howMany > 0) {
     howMany--;
     printf(" egg# %d.\n", howMany);
-    dropServoOpen();                            //Exit
-    digitalWrite (servo1LedPin, ledON);
-    delay(dropDelay);
-    dropServoClose();
-    digitalWrite (servo1LedPin, ledOFF);
-    delay(dropDelay);                   //Let 'drop' close before 'load' opens
-
-    loadServoOpen();                            //Load
-    digitalWrite (servo2LedPin, ledON);
-    delay(loadDelay);
-    loadServoClose();
-    digitalWrite (servo2LedPin, ledOFF);
-
-    if (howMany > 1) delay(2000);               //Time between eggs
+    loadServoClose();                 //Close the load gate
+    dropServoOpen();                  //Drop an egg
+    delay(dropDelay);                 //Give the egg some time to clear the gate
+    dropServoClose();                 //Close the exit gate
+    loadServoOpen();                  //Open the load gate
+    if (howMany > 1) delay(2000);     //Time between eggs
   }
 }
 

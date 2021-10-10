@@ -8,8 +8,8 @@ void setup_mqtt() {
   strcat(statusTopic, "/stat");
   strcpy(rssiTopic, nodeName);
   strcat(rssiTopic, "/rssi");
-  
-  strcpy(syncTopic,"lid/cmnd/sync");
+
+  strcpy(syncTopic, "roar");
 
   dbugs("cmndTopic= ", cmndTopic);
   dbugs("statusTopic= ", statusTopic);
@@ -44,6 +44,11 @@ void mqttConnect() {
       client.subscribe(cmndTopic);
       Serial.print(F("Subscribing to "));
       Serial.println(cmndTopic);
+
+      client.subscribe(syncTopic);
+      Serial.print(F("Subscribing to "));
+      Serial.println(syncTopic);
+
     } else {
       Serial.print(F("failed, rc="));
       Serial.print(client.state());

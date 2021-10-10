@@ -29,15 +29,19 @@ void beginSerial() {
 // TRACK1_PIN and TRACK2_PIN.
 
 void pulse(int d) {
-  pinMode(d, OUTPUT);
+  Serial.print(F("Pulse: "));
+  Serial.println(d);
   digitalWrite(d, 0);
-  delay(100);
+  pinMode(d, OUTPUT);
+  delay(200);
   pinMode(d, INPUT);
 }
 
 void hold(int d) {
-  pinMode(d, OUTPUT);
+  Serial.print(F("Hold: "));
+  Serial.println(d);
   digitalWrite(d, 0);
+  pinMode(d, OUTPUT);
   delay(2000);
   pinMode(d, INPUT);
 }

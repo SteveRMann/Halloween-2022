@@ -64,6 +64,8 @@ PubSubClient client(monsterBoxLid);
 char statusTopic[20];
 char cmndTopic[20];
 char rssiTopic[20];
+char syncTopic[20];
+
 const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
 const int mqttPort = 1883;
 
