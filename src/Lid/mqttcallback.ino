@@ -60,13 +60,13 @@ void callback(String topic, byte * payload, unsigned int length) {
     if (!strcmp(message, "eyeson")) {
       //Turn on the eyes
       Serial.println(F("Eyes On"));
-      digitalWrite(LEDS_PIN, 1);
+      digitalWrite(EYES_PIN, 1);
     }
 
     if (!strcmp(message, "eyesoff")) {
       //Turn off the eyes
       Serial.println(F("Eyes Off"));
-      digitalWrite(LEDS_PIN, 0);
+      digitalWrite(EYES_PIN, 0);
     }
 
     if (!strcmp(message, "open")) {
@@ -108,29 +108,37 @@ void callback(String topic, byte * payload, unsigned int length) {
   if (topic == syncTopic) {
     //Start the open/close sequence.
     //dfplayer.ino also subscribes to this topic.
-    openTheLid();
-    delay(T1 - T0);
-    closeTheLid();
-    delay(T2 - T1);
-    openTheLid();
-    delay(T3 - T2);
-    closeTheLid();
-    delay(T4 - T3);
-    openTheLid();
-    delay(T5 - T4);
-    closeTheLid();
-    delay(T6 - T5);
-    openTheLid();
-    delay(T7 - T6);
-    closeTheLid();
-    delay(T8 - T7);
-    openTheLid();
-    delay(T9 - T8);
-    closeTheLid();
-    delay(T10 - T9);
-    openTheLid();
-    delay(T11 - T10);
-    closeTheLid();
+    Serial.println(F("Roar"));
+    syncFlag = true;
+    syncStart = millis();
+    t1OpenFlag = true;
+    t2OpenFlag = true;
+    t3OpenFlag = true;
+    t4OpenFlag = true;
+    t5OpenFlag = true;
+    t1CloseFlag = true;
+    t2CloseFlag = true;
+    t3CloseFlag = true;
+    t4CloseFlag = true;
+    t5CloseFlag = true;
+    syncCount = 0;              //Counts lid operations
+
+
+    /*
+        delay(T1 - T0);
+        openTheLid();
+        delay(random(400,700));
+        closeTheLid();
+        delay(T2 - T1);
+        openTheLid();
+        delay(T3 - T2);
+        closeTheLid();
+        delay(T4 - T3);
+        openTheLid();
+        delay(T5 - T4);
+        closeTheLid();
+    */
+
   }
 
 } //callback

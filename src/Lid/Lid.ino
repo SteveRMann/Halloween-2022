@@ -1,6 +1,6 @@
 #define SKETCH "lid"
-#define VERSION "6.4"
-//Version 6.4 added button.h functions
+#define VERSION "6.5"
+//Version 6.5- Made eyes blink
 
 /*
    Brushed DC Motor Control
@@ -18,7 +18,7 @@ const int motorPin = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
 //const int buttonPin = D4;
-const int LEDS_PIN = D5;
+const int EYES_PIN = D5;
 const int FAN_PIN = D6;
 
 const long int Minutes = 60000;           //ms per minute
@@ -79,21 +79,43 @@ Ticker blueTicker;                       //Ticker object for the WiFi Connecting
 Ticker eyesTicker;           //Testing
 
 //--------------- lid timing ---------------
-/* This is the timing of opens (even) and closes (odds).
-  The numbers are millisceonds from the start of track1.mp3
-  as played from dfplayer.ino.
+/* This is the timing of lid openings.
+  The numbers are millisceonds from the start of
+  track2.mp3 as played from dfplayer.ino.
   The sequence is started when an MQTT message is received
-  on topic: lid/cmnd/sync
+  on topic: syncTopic
 */
-const int T0 = 0;
-const int T1 = 4862;
-const int T2 = 5965;
-const int T3 = 9517;
-const int T4 = 9965;
-const int T5 = 16862;
-const int T6 = 17793;
-const int T7 = 21586;
-const int T8 = 22275;
-const int T9 = 23000;
-const int T10 = 23965;
-const int T11 = 25000;
+const int T0 = 0;               //Start
+const int T1OPEN = 250;         //ms from start, first growl
+const int T1CLOSE = 800;
+const int T2OPEN = 2102;
+const int T2CLOSE = 2600;
+const int T3OPEN = 3470;
+const int T3CLOSE = 4400;
+const int T4OPEN = 5038;
+const int T4CLOSE = 5500;
+const int T5OPEN = 6673;
+const int T5CLOSE = 7200;
+bool t1OpenFlag = false;               //If true, we haven't hit this sync point yet
+bool t2OpenFlag = false;
+bool t3OpenFlag = false;
+bool t4OpenFlag = false;
+bool t5OpenFlag = false;
+bool t1CloseFlag = false;
+bool t2CloseFlag = false;
+bool t3CloseFlag = false;
+bool t4CloseFlag = false;
+bool t5CloseFlag = false;
+int syncCount = 0;              //Counts the lid opens and closes.
+
+
+// --------------- Global stuff ---------------
+const int EYES_MAX = 255;
+const int EYES_MIN = 25;
+const int FAN_MAX = 255;
+const int FAN_MIN = 255;
+int eyes = EYES_MIN;                    //Eyes intensity
+long int blink = 0;
+
+bool syncFlag = false;
+long int syncStart;

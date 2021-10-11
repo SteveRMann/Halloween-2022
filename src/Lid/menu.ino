@@ -28,18 +28,6 @@ void menu() {
       c = '0';
     }
 
-if (c == '3') {
-      Serial.println(F("3- Eyes On"));
-      digitalWrite(LEDS_PIN, 1);
-      c = '0';
-    }
-
-if (c == '4') {
-      Serial.println(F("4- Eyes Off"));
-      digitalWrite(LEDS_PIN, 0);
-      c = '0';
-    }
-
 if (c == '5') {
       Serial.println(F("5- Fan On"));
       analogWrite(FAN_PIN, 255);
@@ -63,8 +51,6 @@ void drawMenu() {
   Serial.println(F( "MENU:" ));
   Serial.println(F( "1) Open" ));
   Serial.println(F( "2) Close" ));
-  Serial.println(F( "3) Eyes ON" ));
-  Serial.println(F( "4) Eyes OFF" ));
   Serial.println(F( "5) Fan ON" ));
   Serial.println(F( "6) Fan Off" ));
   Serial.println(F( "-----------------------------" ));

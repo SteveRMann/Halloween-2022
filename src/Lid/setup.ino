@@ -6,7 +6,7 @@ void setup() {
   pinMode (BUTTON_PIN, INPUT_PULLUP);
   pinMode(BLUE_LED_PIN, OUTPUT);
   analogWrite(motorPin, 0);             //PWM pin, start at zero.
-  pinMode(LEDS_PIN, OUTPUT);
+  pinMode(EYES_PIN, OUTPUT);
   pinMode(FAN_PIN, OUTPUT);
 
   beginSerial();
@@ -26,20 +26,40 @@ void setup() {
   button.attachClick(singleClick);
   button.attachLongPressStop(longPress);
 
-  //Testing D5 LEDs (yellow) and D6 FAN (green)
-  eyesTicker.attach(0.1, eyesTick);           //Start eyesTick
-  delay(1000);                                //Blink eyes for one second
-  eyesTicker.detach();
-  delay(1000);                                //Wait a second before turning the fan on
+  /*
+    //Testing D5 LEDs (yellow) and D6 FAN (green)
+    eyesTicker.attach(0.1, eyesTick);           //Start eyesTick
+    delay(1000);                                //Blink eyes for one second
+    eyesTicker.detach();
+    delay(1000);                                //Wait a second before turning the fan on
+  */
+
+
+  //Cycle through the eyes' LED intensity.
+  for (int j = 0; j < 4; j++) {
+    for (int i = 10; i < 255; i++) {
+      analogWrite(EYES_PIN, i);
+      delay(2);
+    }
+    for (int i = 255; i > 10; i--) {
+      analogWrite(EYES_PIN, i);
+      delay(2);
+    }
+  }
+  eyes = EYES_MIN;
+  analogWrite(EYES_PIN, eyes);
+  delay(1000);
 
   //Fan
-  analogWrite(FAN_PIN, 250);
+  analogWrite(FAN_PIN, FAN_MAX);
   delay(2000);
   analogWrite(FAN_PIN, 0);
   delay(1000);                                //Wait a second before opening the lid
-  
+
   //Lid
   openTheLid();
   delay(1000);
   closeTheLid();
+  
+  analogWrite(FAN_PIN, FAN_MIN);
 }

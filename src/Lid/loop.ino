@@ -5,16 +5,24 @@ void loop() {
   button.tick();            //Has a button been pressed?
   menu();
 
+  //Fade the eyes
+  if (eyes > EYES_MIN) {
+    eyes -= 1;
+    analogWrite(EYES_PIN, eyes);
+    delay(10);
+  }
+
+  blinker();                //Blink the eyes
+  sync();                   //Check the sync status.
+
   /*
-    int i = digitalRead(buttonPin);
-    if (i == 0) {
-      eyesOn();
-      fanOn();
+    TO DO- Open the lid at random times.
+    peek();                 //Check the peek status.
+
+      eyes??
       openTheLid();
-      delay(1000);
+      delay(250);
       closeTheLid();
-      eyesOff();
-      fanOff();
-    }
+
   */
 }
