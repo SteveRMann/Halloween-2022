@@ -101,7 +101,7 @@ void callback(String topic, byte * payload, unsigned int length) {
     Serial.println(F("ROAR- play track 2"));
     //Since there's no feedback from the DFPlayer module,
     //this is approximately the length of track1
-    delay (25000);
+    delay (9000);
     hold(TRACK1_PIN);                    //Restart track1
     Serial.println(F("loop track 1"));
   }
