@@ -54,7 +54,7 @@ void dropEgg(int howMany) {
 
 // -------------- dropServoOpen() --------------
 void dropServoOpen() {                          //Open the exit
-  servoOne.write(1);
+  servoOne.write(5);
   servo1Position = 0;
 }
 
