@@ -111,6 +111,7 @@ void callback(String topic, byte * payload, unsigned int length) {
     Serial.println(F("Roar"));
     syncFlag = true;
     syncStart = millis();
+
     t1OpenFlag = true;
     t2OpenFlag = true;
     t3OpenFlag = true;
@@ -121,24 +122,8 @@ void callback(String topic, byte * payload, unsigned int length) {
     t3CloseFlag = true;
     t4CloseFlag = true;
     t5CloseFlag = true;
+
     syncCount = 0;              //Counts lid operations
-
-
-    /*
-        delay(T1 - T0);
-        openTheLid();
-        delay(random(400,700));
-        closeTheLid();
-        delay(T2 - T1);
-        openTheLid();
-        delay(T3 - T2);
-        closeTheLid();
-        delay(T4 - T3);
-        openTheLid();
-        delay(T5 - T4);
-        closeTheLid();
-    */
-
   }
 
 } //callback
