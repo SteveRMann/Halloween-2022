@@ -26,14 +26,6 @@ void setup() {
   button.attachClick(singleClick);
   button.attachLongPressStop(longPress);
 
-  /*
-    //Testing D5 LEDs (yellow) and D6 FAN (green)
-    eyesTicker.attach(0.1, eyesTick);           //Start eyesTick
-    delay(1000);                                //Blink eyes for one second
-    eyesTicker.detach();
-    delay(1000);                                //Wait a second before turning the fan on
-  */
-
 
   //Cycle through the eyes' LED intensity.
   for (int j = 0; j < 4; j++) {

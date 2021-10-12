@@ -13,7 +13,7 @@ void loop() {
   }
 
   blinker();                //Blink the eyes
-  sync();                   //Check the sync status.
+  //sync();                   //Check the sync status.
 
   /*
     TO DO- Open the lid at random times.
