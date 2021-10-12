@@ -14,10 +14,7 @@ void setup() {
   start_OTA();
   setup_mqtt();                         //Generate the topics
   client.setServer(mqttServer, mqttPort);
-    mqttConnect();
-
-  //Serial.println(F("---------- Starting ----------"));
-  //client.publish (statusTopic, "Starting");
+  mqttConnect();
 
   lidState = 0;     //Open
   drawMenu();
@@ -56,6 +53,7 @@ void setup() {
   analogWrite(FAN_PIN, FAN_MIN);
 
 
-  //Start the LED timers
+  //Start the timers
+  ///peek_ON();
   eyes_ON();
 }
