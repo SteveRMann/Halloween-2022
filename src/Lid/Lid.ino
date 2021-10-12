@@ -1,7 +1,8 @@
 #define SKETCH "lid"
-#define VERSION "6.6"
+#define VERSION "6.7"
 //Version 6.5- Made eyes blink
 //Version 6.6- Using nodelay.h for dimming the eyes
+//Version 6.7- Using nodelay.h to open/close the lid at random times
 
 /*
    Brushed DC Motor Control
@@ -11,8 +12,6 @@
    and randomly. 
 */
 
-#define TENSEC 10000
-#define FIVESEC 5000
 
 const int LED_ON = 1;
 const int LED_OFF = 0;
@@ -37,14 +36,20 @@ int bounceCount = 0;
 #include <NoDelay.h>
 
 // prototypes (noDelay callbacks)
+///void peek_ON();
+///void peek_OFF();
 void eyes_ON();
 void eyes_OFF();
 void eyes_DIM();
 
+
 //Create noDelay objects
+///noDelay peekOnTime(1000, peek_ON , false);
+///noDelay peekOffTime(1000, peek_OFF, false);
 noDelay eyesLED_onTime(1000, eyes_ON , false);
 noDelay eyesLED_offTime(1000, eyes_OFF, false);
 noDelay eyesLED_dim(20, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
+
 
 
 
