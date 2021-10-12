@@ -5,6 +5,7 @@ void loop() {
   button.tick();            //Has a button been pressed?
   menu();
 
+/*
   //Blink the eyes
   eyesLED_onTime.update();
   eyesLED_offTime.update();        //Blink eye
@@ -12,16 +13,10 @@ void loop() {
   //Fade the eyes
   eyesLED_dim.update();     //Dim the eyes
 
-  //sync();                   //Check the sync status.
+  //Open the lid at random times.
+  peekOnTime.update();        //If time has past, run set function
+  peekOffTime.update();
+*/  
+  //syncCheck();                   //Check the sync status.
 
-  /*
-    TO DO- Open the lid at random times.
-    peek();                 //Check the peek status.
-
-      eyes??
-      openTheLid();
-      delay(250);
-      closeTheLid();
-
-  */
 }
