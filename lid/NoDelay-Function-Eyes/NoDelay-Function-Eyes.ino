@@ -19,32 +19,32 @@
     stop() : This function will keep NoDelay from returning true or running a function when calling update().
 */
 
-#include<NoDelay.h>
+#include <NoDelay.h>
 
 //---------- prototypes ----------
 void yellow_ON();
 void yellow_OFF();
-void green_ON();
-void green_OFF();
-void green_DIM();
+void eyes_ON();
+void eyes_OFF();
+void eyes_DIM();
 
 
 //Create noDelay objects
 noDelay yellowLED_onTime(1000, yellow_ON , false);
 noDelay yellowLED_offTime(1000, yellow_OFF, false);
-noDelay greenLED_onTime(1000, green_ON , false);
-noDelay greenLED_offTime(1000, green_OFF, false);
-noDelay greenLED_dim(20, green_DIM , true);           //How fast to dim the LED. Lower is faster
+noDelay eyesLED_onTime(1000, eyes_ON , false);
+noDelay eyesLED_offTime(1000, eyes_OFF, false);
+noDelay eyesLED_dim(20, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
 
 const int LED_ON = 1;
 const int LED_OFF = 0;
 const int LED_YELLOW_PIN = D2;
-const int LED_GREEN_PIN = D1;
+const int LED_EYE_PIN = D1;
 
 
-int greenVal = 0;
-const int GREEN_MIN = 5;            //Green will dim to this value in loop
-const int GREEN_MAX = 100;          //Yellow_ON will bring green back to this level.
+int eyeVal = 0;
+const int EYES_MIN = 5;            //Eye will dim to this value in loop
+const int EYES_MAX = 100;          //Yellow_ON will bring eye back to this level.
 
 
 // ---------- setup ----------
@@ -56,14 +56,14 @@ void setup() {
   Serial.println();
 
   pinMode(LED_YELLOW_PIN, OUTPUT);
-  pinMode(LED_GREEN_PIN, OUTPUT);
+  pinMode(LED_EYE_PIN, OUTPUT);
   digitalWrite(LED_YELLOW_PIN, LED_OFF);
-  digitalWrite(LED_GREEN_PIN, LED_OFF);
+  digitalWrite(LED_EYE_PIN, LED_OFF);
 
 
   //Start the LED timers
   yellow_ON();                     //The ON functions will start OFF functions.
-  green_ON();
+  eyes_ON();
 }
 
 
@@ -71,9 +71,9 @@ void setup() {
 void loop() {
   yellowLED_onTime.update();        //If time has past, run set function
   yellowLED_offTime.update();
-  greenLED_onTime.update();
-  greenLED_offTime.update();        //Blink green
-  greenLED_dim.update();            //Dim green
+  eyesLED_onTime.update();
+  eyesLED_offTime.update();        //Blink eye
+  eyesLED_dim.update();            //Dim eye
 
 }
 
@@ -85,7 +85,7 @@ void yellow_ON() {
   yellowLED_onTime.stop();                                //Stop the ON timer
   yellowLED_offTime.setdelay(random(1000, 5000));         //LED will be on for this time.
   yellowLED_offTime.start();                              //Start the OFF timer
-  greenVal = GREEN_MAX;
+  eyeVal = EYES_MAX;
 }
 
 void yellow_OFF() {
@@ -95,24 +95,24 @@ void yellow_OFF() {
   yellowLED_onTime.start();                              //Start the ON timer
 }
 
-void green_ON() {
-  analogWrite(LED_GREEN_PIN, greenVal);
-  greenLED_onTime.stop();                                //Stop the ON timer
-  greenLED_offTime.setdelay(random(1500, 4000));         //LED will be on for this time.
-  greenLED_offTime.start();                              //Start the OFF timer
+void eyes_ON() {
+  analogWrite(LED_EYE_PIN, eyeVal);
+  eyesLED_onTime.stop();                                //Stop the ON timer
+  eyesLED_offTime.setdelay(random(1500, 4000));         //LED will be on for this time.
+  eyesLED_offTime.start();                              //Start the OFF timer
 }
 
-void green_OFF() {
-  digitalWrite(LED_GREEN_PIN, LED_OFF);                   //Turn off the green LED
-  greenLED_offTime.stop();                                //Stop the OFF timer
-  greenLED_onTime.setdelay(random(100, 150));             //LED will be off for this time.
-  greenLED_onTime.start();                                //Start the ON timer
+void eyes_OFF() {
+  digitalWrite(LED_EYE_PIN, LED_OFF);                   //Turn off the eye LED
+  eyesLED_offTime.stop();                                //Stop the OFF timer
+  eyesLED_onTime.setdelay(random(100, 150));             //LED will be off for this time.
+  eyesLED_onTime.start();                                //Start the ON timer
 }
 
-void green_DIM() {
-  //Fade the greenVal
-  if (greenVal > GREEN_MIN) {
-    greenVal -= 1;
-    analogWrite(LED_GREEN_PIN, greenVal);
+void eyes_DIM() {
+  //Fade the eyeVal
+  if (eyeVal > EYES_MIN) {
+    eyeVal -= 1;
+    analogWrite(LED_EYE_PIN, eyeVal);
   }
 }

@@ -9,9 +9,3 @@ void blueTick() {
   int state = digitalRead(BLUE_LED_PIN);            // get the current state of GPIO pin
   digitalWrite(BLUE_LED_PIN, !state);               // set pin to the opposite state
 }
-
-void eyesTick() {
-  //toggle state
-  int state = digitalRead(EYES_PIN);        // get the current state of GPIO pin
-  digitalWrite(EYES_PIN, !state);               // set pin to the opposite state
-}

@@ -5,14 +5,13 @@ void loop() {
   button.tick();            //Has a button been pressed?
   menu();
 
-  //Fade the eyes
-  if (eyes > EYES_MIN) {
-    eyes -= 1;
-    analogWrite(EYES_PIN, eyes);
-    delay(10);
-  }
+  //Blink the eyes
+  eyesLED_onTime.update();
+  eyesLED_offTime.update();        //Blink eye
 
-  blinker();                //Blink the eyes
+  //Fade the eyes
+  eyesLED_dim.update();     //Dim the eyes
+
   //sync();                   //Check the sync status.
 
   /*

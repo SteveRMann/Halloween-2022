@@ -9,7 +9,6 @@ void dbugs(const char *s, const char *v) {
 }
 
 
-
 void beginSerial() {
   Serial.begin(115200);
   delay(1);
@@ -41,8 +40,8 @@ void startTheMotor() {
 // ---------- Open the lid ----------
 void openTheLid() {
   analogWrite(FAN_PIN, FAN_MAX);      //Every time we open the lid, turn the fan and eyes up to max.
-  eyes = EYES_MAX;
-  analogWrite(EYES_PIN, eyes);
+  eyesVal = EYES_MAX;
+  analogWrite(EYES_PIN, eyesVal);
 
   startTheMotor();
   analogWrite(motorPin, 200);        //Slow it down
@@ -65,6 +64,40 @@ void closeTheLid() {
   client.publish (statusTopic, "Closed");
 }
 
+
+
+
+
+void eyes_ON() {
+  Serial.print(F("eyesVal in eyes_ON()= "));
+  Serial.println(eyesVal);
+  analogWrite(EYES_PIN, eyesVal);
+  eyesLED_onTime.stop();                                //Stop the ON timer
+  eyesLED_offTime.setdelay(random(2500, 6000));         //LED will be on for this time.
+  eyesLED_offTime.start();                              //Start the OFF timer
+}
+
+void eyes_OFF() {
+  Serial.println(F("In eyes_OFF()"));
+  digitalWrite(EYES_PIN, LED_OFF);                       //Turn off the eyes LED
+  eyesLED_offTime.stop();                                //Stop the OFF timer
+  eyesLED_onTime.setdelay(random(200, 350));             //LED will be off for this time.
+  eyesLED_onTime.start();                                //Start the ON timer
+  eyesVal = EYES_MAX;                             //Eyes max on next blink...
+}
+
+
+
+// Function to dim the eyes
+void eyes_DIM() {
+  //Fade eyesVal.
+  if (eyesVal > EYES_MIN) {
+    eyesVal -= 1;
+    Serial.print(F("in eyes_DIM, eyesVal= "));
+    Serial.println(eyesVal);
+    analogWrite(EYES_PIN, eyesVal);
+  }
+}
 
 
 // ---------- button functions ----------
@@ -90,19 +123,8 @@ void longPress() {
   }
 }
 
-void blinker() {
-  //Blink the eyes
-  if (blink > 0) {
-    blink -= 1;
-    delay(1);
-  } else {
-    analogWrite(EYES_PIN, 0);
-    delay(random(90, 200));
-    analogWrite(EYES_PIN, eyes);
-    blink = random(3000, 9000);        //Blink every 3 to 9 seconds
-  }
-}
 
+// ---------- sync ----------
 void sync() {
   if (syncFlag) {
     //Sync is in progress

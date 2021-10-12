@@ -1,18 +1,21 @@
 #define SKETCH "lid"
-#define VERSION "6.5"
+#define VERSION "6.6"
 //Version 6.5- Made eyes blink
+//Version 6.6- Using nodelay.h for dimming the eyes
 
 /*
    Brushed DC Motor Control
    Using Wemos D1 Mini
 
    Project is a monster box. The motor slightly opens the box periodically
-   and randomly. Inside the box will be a second motor that spins a chain
-   to make noise.
+   and randomly. 
 */
 
 #define TENSEC 10000
 #define FIVESEC 5000
+
+const int LED_ON = 1;
+const int LED_OFF = 0;
 
 const int motorPin = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
@@ -28,6 +31,21 @@ const int MIN_PWM = 200;                  //Anything lower and the motor won't s
 int motorPwm = MIN_PWM;                   //PWM value for motor on.
 int lidState;
 int bounceCount = 0;
+
+
+// --------------- noDelay ---------------
+#include <NoDelay.h>
+
+// prototypes (noDelay callbacks)
+void eyes_ON();
+void eyes_OFF();
+void eyes_DIM();
+
+//Create noDelay objects
+noDelay eyesLED_onTime(1000, eyes_ON , false);
+noDelay eyesLED_offTime(1000, eyes_OFF, false);
+noDelay eyesLED_dim(20, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
+
 
 
 // --------------- button declarations ---------------
@@ -76,7 +94,7 @@ const int BLUE_LED_PIN = D7;             //D4 is LED_BUILTIN on Wemos D1 Mini
 //for LED status
 #include <Ticker.h>
 Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED
-Ticker eyesTicker;           //Testing
+
 
 //--------------- lid timing ---------------
 /* This is the timing of lid openings.
@@ -109,13 +127,16 @@ bool t5CloseFlag = false;
 int syncCount = 0;              //Counts the lid opens and closes.
 
 
+
 // --------------- Global stuff ---------------
-const int EYES_MAX = 255;
-const int EYES_MIN = 25;
+int eyesVal = 0;
+const int EYES_MIN = 5;            //Eye will dim to this value in loop
+const int EYES_MAX = 100;          //Yellow_ON will bring eye back to this level.
+
 const int FAN_MAX = 255;
 const int FAN_MIN = 255;
-int eyes = EYES_MIN;                    //Eyes intensity
-long int blink = 0;
+
+///long int blink = 0;
 
 bool syncFlag = false;
 long int syncStart;

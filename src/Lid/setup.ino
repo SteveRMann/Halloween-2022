@@ -14,10 +14,10 @@ void setup() {
   start_OTA();
   setup_mqtt();                         //Generate the topics
   client.setServer(mqttServer, mqttPort);
-  mqttConnect();
+    mqttConnect();
 
-  Serial.println(F("---------- Starting ----------"));
-  client.publish (statusTopic, "Starting");
+  //Serial.println(F("---------- Starting ----------"));
+  //client.publish (statusTopic, "Starting");
 
   lidState = 0;     //Open
   drawMenu();
@@ -38,8 +38,8 @@ void setup() {
       delay(2);
     }
   }
-  eyes = EYES_MIN;
-  analogWrite(EYES_PIN, eyes);
+  eyesVal = EYES_MIN;
+  analogWrite(EYES_PIN, eyesVal);
   delay(1000);
 
   //Fan
@@ -52,6 +52,10 @@ void setup() {
   openTheLid();
   delay(1000);
   closeTheLid();
-  
+
   analogWrite(FAN_PIN, FAN_MIN);
+
+
+  //Start the LED timers
+  eyes_ON();
 }

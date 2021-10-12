@@ -11,7 +11,7 @@ void setup_wifi() {
   Serial.println(F("\n"));
   Serial.print(F("Connecting to "));
   Serial.println(MY_SSID);
-  dbugs("Connecting to ", MY_SSID);
+
 
   WiFi.mode(WIFI_STA);
   //WiFi.enableInsecureWEP();
@@ -43,4 +43,6 @@ void setup_wifi() {
   strcat(hostName, macBuffer);
   WiFi.hostname(hostName);
   dbugs("hostName= ", hostName);
+  //Serial.print(F("hostName= "));
+  //Serial.println(hostName);
 }
