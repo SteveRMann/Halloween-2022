@@ -27,7 +27,9 @@ void beginSerial() {
 void startTheMotor() {
   ///Serial.println(F("motor on"));
   analogWrite(motorPin, 255);                 //Turn on the motor
-  delay(50);                                  //Give the motor time to move past the stop switch.
+  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is past the stop switces.
+  analogWrite(motorPin, 150);        //Slow it down
+  
   /*
     Serial.print(F("Limit Switches (open,close)= ("));
     Serial.print(digitalRead(openSwitch));
@@ -44,7 +46,7 @@ void openTheLid() {
   analogWrite(EYES_PIN, eyesVal);
 
   startTheMotor();
-  analogWrite(motorPin, 200);        //Slow it down
+  
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
 
@@ -57,7 +59,6 @@ void openTheLid() {
 void closeTheLid() {
   analogWrite(FAN_PIN, FAN_MIN);
   startTheMotor();
-  analogWrite(motorPin, 200);        //Slow it down
   while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.println(F("CLOSED"));
