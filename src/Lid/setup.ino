@@ -54,6 +54,6 @@ void setup() {
 
 
   //Start the timers
-  ///peek_ON();
   eyes_ON();
+  //eyes_OFF();
 }
