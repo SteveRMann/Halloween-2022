@@ -25,19 +25,11 @@ void beginSerial() {
 // ---------- Functions unique to this sketch ----------
 // ========= Start the motor =========
 void startTheMotor() {
-  ///Serial.println(F("motor on"));
-  analogWrite(motorPin, 255);                 //Turn on the motor
+  analogWrite(motorPin, 255);        //Turn on the motor (max torque)
   while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is past the stop switces.
   analogWrite(motorPin, 150);        //Slow it down
-  
-  /*
-    Serial.print(F("Limit Switches (open,close)= ("));
-    Serial.print(digitalRead(openSwitch));
-    Serial.print(F("), ("));
-    Serial.print(digitalRead(closedSwitch));
-    Serial.print(F(")"));
-  */
 }
+
 
 // ---------- Open the lid ----------
 void openTheLid() {
@@ -46,13 +38,11 @@ void openTheLid() {
   analogWrite(EYES_PIN, eyesVal);
 
   startTheMotor();
-  
+
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
 
-
   Serial.println(F("OPEN"));
-  ///client.publish (statusTopic, "Open");
 }
 
 // ---------- Close the lid ----------
@@ -62,29 +52,27 @@ void closeTheLid() {
   while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.println(F("CLOSED"));
-  ///client.publish (statusTopic, "Closed");
 }
 
 
 
 void eyes_ON() {
   analogWrite(EYES_PIN, eyesVal);
-  eyesLED_onTime.stop();                                //Stop the ON timer
-  eyesLED_offTime.setdelay(random(2500, 6000));         //LED will be on for this time.
-  eyesLED_offTime.start();                              //Start the OFF timer
+  eyesLED_onTime.stop();                           //Stop the ON timer
+  eyesLED_offTime.setdelay(random(2500, 6000));    //LED will be on for this time.
+  eyesLED_offTime.start();                         //Start the OFF timer
 }
 
 void eyes_OFF() {
-  digitalWrite(EYES_PIN, LED_OFF);                       //Turn off the eyes LED
-  eyesLED_offTime.stop();                                //Stop the OFF timer
-  eyesLED_onTime.setdelay(random(200, 350));             //LED will be off for this time.
-  eyesLED_onTime.start();                                //Start the ON timer
+  analogWrite(EYES_PIN, 0);                        //Turn off the eyes LED
+  eyesLED_offTime.stop();                          //Stop the OFF timer
+  eyesLED_onTime.setdelay(random(150, 300));       //LED will be off for this time.
+  eyesLED_onTime.start();                          //Start the ON timer
 }
 
 
 // Function to dim the eyes
 void eyes_DIM() {
-  //Fade eyesVal.
   if (eyesVal > EYES_MIN) {
     eyesVal -= 1;
     analogWrite(EYES_PIN, eyesVal);
@@ -132,9 +120,24 @@ void longPress() {
 }
 
 
-// ---------- sync ----------
+// ---------- syncCheck ----------
 void syncCheck() {
+  static int x = 0;
+  x += 1;
+  if (x > 10000) {
+    x = 0;
+    Serial.print(F("Entering syncCheck(), syncFlag= "));
+    if (syncFlag) {
+      Serial.println(F("true"));
+    } else {
+      Serial.println(F("false"));
+    }
+  }
   if (syncFlag) {
+    Serial.print(F("syncFlag= "));
+    Serial.println(F("true"));
+    Serial.print(F("syncFlagsyncCount= "));
+    Serial.println(syncCount);
     if (millis() - syncStart > T1OPEN && t1OpenFlag) {    //If T1 has expired and the t1OpenFlag flag is true,
       Serial.println(F("open T1"));
       openTheLid();
@@ -196,7 +199,7 @@ void syncCheck() {
       t1CloseFlag = false;
       syncCount += 1;
     }
-    if (syncCount == 10)
+    if (syncCount >= 10)
       //All lid peratons are finished.
       Serial.println(F("syncFlag=false"));
     syncFlag = false;
