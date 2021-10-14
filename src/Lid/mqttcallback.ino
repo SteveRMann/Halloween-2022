@@ -60,13 +60,14 @@ void callback(String topic, byte * payload, unsigned int length) {
     if (!strcmp(message, "eyeson")) {
       //Turn on the eyes
       Serial.println(F("Eyes On"));
-      digitalWrite(EYES_PIN, 1);
+      analogWrite(EYES_PIN, eyesVal);
+
     }
 
     if (!strcmp(message, "eyesoff")) {
       //Turn off the eyes
       Serial.println(F("Eyes Off"));
-      digitalWrite(EYES_PIN, 0);
+      analogWrite(EYES_PIN, 0);
     }
 
     if (!strcmp(message, "open")) {
