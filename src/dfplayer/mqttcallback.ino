@@ -93,6 +93,19 @@ void callback(String topic, byte * payload, unsigned int length) {
       Serial.println(F("Volume Down"));
       hold(PREV_VOLdn_PIN);
     }
+
+    if (!strcmp(message, "roar")) {
+      pulse(TRACK2_PIN);                    //PLay track 2.
+      Serial.println(F("ROAR- play track 2"));
+      //Since there's no feedback from the DFPlayer module,
+      //this is approximately the length of track1
+      delay (9000);
+      hold(TRACK1_PIN);                    //Restart track1
+      Serial.println(F("loop track 1"));
+    }
+
+
+
   }
 
   // --------- syncTopic ---------
