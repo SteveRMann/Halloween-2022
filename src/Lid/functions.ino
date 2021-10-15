@@ -109,99 +109,62 @@ void singleClick() {
 }
 
 void doubleclick() {
-  Serial.println(F("doubleClick- Stop the peek timer"));
-  ///peekOnTime.stop();
-  ///peekOffTime.stop();
+  //Start a sync to the sound
+  Serial.println(F("Start a sync to the sound."));
+  Serial.print(F("Num of elements in syncTbl= "));
+  Serial.println(tblN);
+  for (int i = 0; i < tblN; i++) {                      //For debugging, show the time points
+    Serial.print(syncTbl[i]);
+    Serial.print(F(", "));
+  }
+  Serial.println();
+
+  //Tell the dfPlayer to start.
+
+  //Start the sequence
+  syncClose();
 }
+
+
 
 void longPress() {
   Serial.println(F("longPress"));
-  syncFlag = true;
 }
 
 
-// ---------- syncCheck ----------
-void syncCheck() {
-  static int x = 0;
-  x += 1;
-  if (x > 10000) {
-    x = 0;
-    Serial.print(F("Entering syncCheck(), syncFlag= "));
-    if (syncFlag) {
-      Serial.println(F("true"));
-    } else {
-      Serial.println(F("false"));
-    }
-  }
-  if (syncFlag) {
-    Serial.print(F("syncFlag= "));
-    Serial.println(F("true"));
-    Serial.print(F("syncFlagsyncCount= "));
-    Serial.println(syncCount);
-    if (millis() - syncStart > T1OPEN && t1OpenFlag) {    //If T1 has expired and the t1OpenFlag flag is true,
-      Serial.println(F("open T1"));
-      openTheLid();
-      t1OpenFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T2OPEN && t2OpenFlag) {
-      Serial.println(F("open T2"));
-      openTheLid();
-      t1OpenFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T3OPEN && t3OpenFlag) {
-      Serial.println(F("open T3"));
-      openTheLid();
-      t1OpenFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T4OPEN && t4OpenFlag) {
-      Serial.println(F("open T4"));
-      openTheLid();
-      t1OpenFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T5OPEN && t5OpenFlag) {
-      Serial.println(F("open T5"));
-      openTheLid();
-      t1OpenFlag = false;
-      syncCount += 1;
-    }
+// ---------- sync ----------
+void syncOpen() {
+  sync_open_timer.stop();
+  openTheLid();
+  Serial.print(F("Open at point# "));
+  Serial.print(syncPtr);
+  Serial.print(F(", "));
+  Serial.print(syncTbl[syncPtr]);
+  Serial.println(F(" ms."));
+  sync_close_timer.setdelay(syncTbl[syncPtr++]);
+  sync_close_timer.start();
 
-    if (millis() - syncStart > T1CLOSE && t1CloseFlag) {    //If T1 has expired and the t1CloseFlag flag is true,
-      Serial.println(F("close T1"));
-      closeTheLid();                                           //close the lid
-      t1CloseFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T2CLOSE && t2CloseFlag) {
-      Serial.println(F("close T2"));
-      closeTheLid();
-      t1CloseFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T3CLOSE && t3CloseFlag) {
-      Serial.println(F("close T3"));
-      closeTheLid();
-      t1CloseFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T4CLOSE && t4CloseFlag) {
-      Serial.println(F("close T4"));
-      closeTheLid();
-      t1CloseFlag = false;
-      syncCount += 1;
-    }
-    if (millis() - syncStart > T5CLOSE && t5CloseFlag) {
-      Serial.println(F("close T5"));
-      closeTheLid();
-      t1CloseFlag = false;
-      syncCount += 1;
-    }
-    if (syncCount >= 10)
-      //All lid peratons are finished.
-      Serial.println(F("syncFlag=false"));
-    syncFlag = false;
+  if (syncPtr > tblN) {         //When we run out of time points, stop the timers.
+    sync_open_timer.stop();
+    sync_close_timer.stop();
+    syncPtr = 0;
+  }
+}
+
+void syncClose() {
+  sync_close_timer.stop();
+  closeTheLid();
+  Serial.print(F("Close at point# "));
+  Serial.print(syncPtr);
+  Serial.print(F(", "));
+  Serial.print(syncTbl[syncPtr]);
+  Serial.println(F(" ms."));
+  sync_open_timer.setdelay(syncTbl[syncPtr++]);
+  sync_open_timer.start();
+
+  if (syncPtr > tblN) {         //When we run out of time points, stop the timers.
+    sync_open_timer.stop();
+    sync_close_timer.stop();
+    syncPtr = 0;
   }
 }
