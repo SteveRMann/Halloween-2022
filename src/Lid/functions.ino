@@ -110,6 +110,7 @@ void singleClick() {
 
 void doubleclick() {
   //Start a sync to the sound
+/*  
   Serial.println(F("Start a sync to the sound."));
   Serial.print(F("Num of elements in syncTbl= "));
   Serial.println(tblN);
@@ -118,9 +119,10 @@ void doubleclick() {
     Serial.print(F(", "));
   }
   Serial.println();
+*/
 
   //Tell the dfPlayer to start.
-
+  client.publish ("dfplayer/cmnd", "roar");
   //Start the sequence
   syncClose();
 }
@@ -133,6 +135,8 @@ void longPress() {
 
 
 // ---------- sync ----------
+//When started, this function cycles through the sync timer table, syncTbl[]
+//The sequence is started by calling syncClose().
 void syncOpen() {
   sync_open_timer.stop();
   openTheLid();
