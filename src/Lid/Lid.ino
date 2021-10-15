@@ -1,11 +1,12 @@
 #define SKETCH "lid"
-#define VERSION "6.6"
+#define VERSION "6.7"
 //Version 6.5- Made eyes blink
 //Version 6.6- Using nodelay.h for dimming the eyes
-//Version 6.7- NOT WORKING Using nodelay.h to open/close the lid at random times
+//Version 6.7- Synchronizing with sounds.
+//             Starts when MQTT topic lid/cmnd + message "roar" is received.
+
 
 /*
-   Brushed DC Motor Control
    Using Wemos D1 Mini
 
    Project is a monster box. The motor slightly opens the box periodically
@@ -46,7 +47,7 @@ void syncClose();
 //Create noDelay objects
 noDelay eyesLED_onTime(1000, eyes_ON , false);
 noDelay eyesLED_offTime(1000, eyes_OFF, false);
-noDelay eyesLED_dim(100, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
+noDelay eyesLED_dim(200, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
 noDelay sync_open_timer(100, syncOpen , false);
 noDelay sync_close_timer(100, syncClose , false);
 
