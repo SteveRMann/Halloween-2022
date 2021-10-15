@@ -9,7 +9,7 @@
    Using Wemos D1 Mini
 
    Project is a monster box. The motor slightly opens the box periodically
-   and randomly. 
+   and randomly.
 */
 
 
@@ -39,14 +39,38 @@ int bounceCount = 0;
 void eyes_ON();
 void eyes_OFF();
 void eyes_DIM();
+void syncOpen();
+void syncClose();
 
 
 //Create noDelay objects
 noDelay eyesLED_onTime(1000, eyes_ON , false);
 noDelay eyesLED_offTime(1000, eyes_OFF, false);
 noDelay eyesLED_dim(100, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
+noDelay sync_open_timer(100, syncOpen , false);
+noDelay sync_close_timer(100, syncClose , false);
 
 
+
+// --------------- lid sync timing ---------------
+// These are the time points for the lid state change
+// Odd is open, even is close.
+const int t0 = 0;         //cmnd received
+const int t1 = 467;       //ms until first open
+const int t2 = 1067;
+const int t3 = 2102;
+const int t4 = 2702;
+const int t5 = 3470;
+const int t6 = 4070;
+const int t7 = 5038;
+const int t8 = 5638;
+const int t9 = 6673;
+const int t10 = 7273;
+
+unsigned int syncTbl[] = {t1 - t0, t2 - t1, t3 - t2, t4 - t3, t5 - t4, t6 - t5, t7 - t6, t8 - t7, t9 - t8, t10 - t9};
+int syncTblPtr = 0;
+int syncPtr=0;
+int tblN;
 
 
 // --------------- button declarations ---------------
@@ -97,36 +121,6 @@ const int BLUE_LED_PIN = D7;             //D4 is LED_BUILTIN on Wemos D1 Mini
 Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED
 
 
-//--------------- lid timing ---------------
-/* This is the timing of lid openings.
-  The numbers are millisceonds from the start of
-  track2.mp3 as played from dfplayer.ino.
-  The sequence is started when an MQTT message is received
-  on topic: syncTopic
-*/
-const int T0 = 0;               //Start
-const int T1OPEN = 250;         //ms from start, first growl
-const int T1CLOSE = 800;
-const int T2OPEN = 2102;
-const int T2CLOSE = 2600;
-const int T3OPEN = 3470;
-const int T3CLOSE = 4400;
-const int T4OPEN = 5038;
-const int T4CLOSE = 5500;
-const int T5OPEN = 6673;
-const int T5CLOSE = 7200;
-bool t1OpenFlag = false;               //If true, we haven't hit this sync point yet
-bool t2OpenFlag = false;
-bool t3OpenFlag = false;
-bool t4OpenFlag = false;
-bool t5OpenFlag = false;
-bool t1CloseFlag = false;
-bool t2CloseFlag = false;
-bool t3CloseFlag = false;
-bool t4CloseFlag = false;
-bool t5CloseFlag = false;
-int syncCount = 0;              //Counts the lid opens and closes.
-
 
 
 // --------------- Global stuff ---------------
@@ -136,8 +130,3 @@ const int EYES_MAX = 100;          //open() will bring eye back to this level.
 
 const int FAN_MAX = 255;
 const int FAN_MIN = 255;
-
-///long int blink = 0;
-
-bool syncFlag = false;
-long int syncStart;
