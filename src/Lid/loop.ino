@@ -9,8 +9,11 @@ void loop() {
   eyesLED_offTime.update();        //Blink eye
   eyesLED_dim.update();            //Dim eye
 
+  sync_open_timer.update();        //Sync timers
+  sync_close_timer.update();
+
   menu();
-  syncCheck();              //Check the sync status.
+  //syncCheck();              //Check the sync status.
   eyes_DIM();
 
 }
