@@ -105,6 +105,8 @@ void callback(String topic, byte * payload, unsigned int length) {
 
 
     if (!strcmp(message, "roar")) {
+      //Tell the sound board to start
+      client.publish ("dfplayer/cmnd", "roar");
       //Start the open/close sequence.
       syncClose();                    //Close the lid and start the sync open timer.
     }
