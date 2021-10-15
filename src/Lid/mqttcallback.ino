@@ -91,7 +91,7 @@ void callback(String topic, byte * payload, unsigned int length) {
 
 
     if (!strcmp(message, "help")) {
-      client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff open close");
+      client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff open close roar");
       //Print the available commands
       //Serial.println(F("Commands: "));
       //Serial.println(F("fanOn -  Turn on the mist fan."));
@@ -103,28 +103,23 @@ void callback(String topic, byte * payload, unsigned int length) {
       //Serial.println(F("Open and Close the lid."));
     }
 
+
+    if (!strcmp(message, "roar")) {
+      //Start the open/close sequence.
+      syncClose();                    //Close the lid and start the sync open timer.
+    }
   }
+
+
+
 
   // --------- syncTopic ---------
   if (topic == syncTopic) {
     //Start the open/close sequence.
     //dfplayer.ino also subscribes to this topic.
     Serial.println(F("Roar"));
-    syncFlag = true;
-    syncStart = millis();
-
-    t1OpenFlag = true;
-    t2OpenFlag = true;
-    t3OpenFlag = true;
-    t4OpenFlag = true;
-    t5OpenFlag = true;
-    t1CloseFlag = true;
-    t2CloseFlag = true;
-    t3CloseFlag = true;
-    t4CloseFlag = true;
-    t5CloseFlag = true;
-
-    syncCount = 0;              //Counts lid operations
+    syncClose();                    //Close the lid and start the sync open timer.
   }
+
 
 } //callback
