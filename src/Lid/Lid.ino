@@ -6,6 +6,7 @@
 //             Starts when MQTT topic lid/cmnd + message "roar" is received.
 //Version 7.0- Syncing sound by beat is not working satisfactorily.
 //             This version just bounces the lid for the duration of the roar.
+//             This version also adds the random peeks.
 
 
 /*
@@ -21,7 +22,7 @@ const int LED_OFF = 0;
 
 const int motorPin = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
-const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
+const int openSwitch = D2;                //GPIO4-Limit pin, stops the motor. (pink)
 //const int buttonPin = D4;
 const int EYES_PIN = D5;
 const int FAN_PIN = D6;
@@ -44,14 +45,17 @@ void eyes_OFF();
 void eyes_DIM();
 void syncOpen();
 void syncClose();
-
+void peek_ON();
+void peek_OFF();
 
 //Create noDelay objects
 noDelay eyesLED_onTime(1000, eyes_ON , false);
 noDelay eyesLED_offTime(1000, eyes_OFF, false);
-noDelay eyesLED_dim(200, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
-noDelay sync_open_timer(100, syncOpen , false);
+noDelay eyesLED_dim(200, eyes_DIM , true);            //How fast to dim the LED. Lower is faster
+noDelay sync_open_timer(100, syncOpen , false);       //Controls the open/close when dfPlayer is making "roar"
 noDelay sync_close_timer(100, syncClose , false);
+noDelay peekOnTime(1000,peek_ON, false);
+noDelay peekOffTime(1000,peek_OFF, false);
 
 
 
@@ -59,18 +63,14 @@ noDelay sync_close_timer(100, syncClose , false);
 // These are the time points for the lid state change
 // Odd is open, even is close.
 const int t0 = 0;         //cmnd received
-const int t1 = 467;       //ms until first open
-const int t2 = 1067;
-const int t3 = 2102;
-const int t4 = 2702;
-const int t5 = 3470;
-const int t6 = 4070;
-const int t7 = 5038;
-const int t8 = 5638;
-const int t9 = 6673;
-const int t10 = 7273;
+const int t1 = 400;       //ms until first open
+const int t2 = 1500;      //close
+const int t3 = 2000;      //Open
+const int t4 = 4000;      //Close
+const int t5 = 4500;      //Open
+const int t6 = 6500;      //Close
 
-unsigned int syncTbl[] = {t1 - t0, t2 - t1, t3 - t2, t4 - t3, t5 - t4, t6 - t5, t7 - t6, t8 - t7, t9 - t8, t10 - t9};
+unsigned int syncTbl[] = {t1 - t0, t2 - t1, t3 - t2, t4 - t3, t5 - t4, t6 - t5};
 int syncTblPtr = 0;
 int syncPtr=0;
 int tblN;

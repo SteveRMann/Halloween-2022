@@ -26,7 +26,10 @@ void beginSerial() {
 // ========= Start the motor =========
 void startTheMotor() {
   analogWrite(motorPin, 255);        //Turn on the motor (max torque)
-  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is past the stop switces.
+  //While either switch is closed, wait until motor is past the stop switces.
+  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) {
+    yield();
+  }
   analogWrite(motorPin, 150);        //Slow it down
 }
 
@@ -41,7 +44,6 @@ void openTheLid() {
 
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
   analogWrite(motorPin, 0);                   //Stop the motor
-
   Serial.println(F("OPEN"));
 }
 
@@ -56,6 +58,7 @@ void closeTheLid() {
 
 
 
+// ---------- eyes ----------
 void eyes_ON() {
   analogWrite(EYES_PIN, eyesVal);
   eyesLED_onTime.stop();                           //Stop the ON timer
@@ -73,27 +76,33 @@ void eyes_OFF() {
 
 // Function to dim the eyes
 void eyes_DIM() {
+  static long int dimTime;
   if (eyesVal > EYES_MIN) {
-    eyesVal -= 1;
-    analogWrite(EYES_PIN, eyesVal);
+    //millis() - lastTimeChecked >= elapsed time
+    if (millis() - dimTime  > 50) {               //Once every 1/25 of a second
+      eyesVal -= 1;                               //Dim the lights slightly
+      analogWrite(EYES_PIN, eyesVal);
+      dimTime = millis();
+    }
   }
 }
 
 
+// ---------- peek ----------
 void peek_ON() {
   //The peek ON timer has dinged.
-  //Turn on the LED, stop the ON timer then start the OFF timer.
-  ///openTheLid();
-  ///peekOnTime.stop();                                //Stop the ON timer
-  ///peekOffTime.setdelay(random(1000, 5000));         //Lid will be open for this time.
-  ///peekOffTime.start();                              //Start the OFF timer
+  //Open the lid, stop the ON timer then start the OFF timer.
+  openTheLid();
+  peekOnTime.stop();                                //Stop the ON timer
+  peekOffTime.setdelay(random(1000, 5000));         //Lid will be open for this time.
+  peekOffTime.start();                              //Start the OFF timer
 }
 
 void peek_OFF() {
-  ///closeTheLid();
-  ///peekOffTime.stop();                              //Stop the OFF timer
-  ///peekOnTime.setdelay(random(1000, 6000));         //Lid will be closed for this time.
-  ///peekOnTime.start();                              //Start the ON timer
+  closeTheLid();
+  peekOffTime.stop();                              //Stop the OFF timer
+  peekOnTime.setdelay(random(15000UL, 30000UL));   //Lid will be closed for this time.
+  peekOnTime.start();                              //Start the ON timer
 }
 
 
@@ -110,7 +119,7 @@ void singleClick() {
 
 void doubleclick() {
   //Start a sync to the sound
-/*  
+
   Serial.println(F("Start a sync to the sound."));
   Serial.print(F("Num of elements in syncTbl= "));
   Serial.println(tblN);
@@ -119,7 +128,7 @@ void doubleclick() {
     Serial.print(F(", "));
   }
   Serial.println();
-*/
+
 
   //Tell the dfPlayer to start.
   client.publish ("dfplayer/cmnd", "roar");

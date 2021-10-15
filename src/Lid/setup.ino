@@ -55,7 +55,8 @@ void setup() {
 
   //Start the timers
   eyes_ON();
-  //eyes_OFF();
+  peek_OFF();
+
 
   //Reset the tblPtr (for syncing the lid with sound).
   syncPtr = 0;

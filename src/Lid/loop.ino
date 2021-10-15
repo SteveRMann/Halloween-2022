@@ -12,6 +12,9 @@ void loop() {
   sync_open_timer.update();        //Sync timers
   sync_close_timer.update();
 
+  peekOnTime.update();
+  peekOffTime.update();
+  
   menu();
   //syncCheck();              //Check the sync status.
   eyes_DIM();
