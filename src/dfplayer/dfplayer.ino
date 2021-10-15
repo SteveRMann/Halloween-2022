@@ -1,6 +1,6 @@
 #define SKETCH "dfplayer"
-#define VERSION "1.3"
-// Version 1.3- Added syncTopic (lid/cmnd/sync)
+#define VERSION "1.4"
+// Version 1.4- Added sync command (lid/cmnd roar).
 
 
 /*
