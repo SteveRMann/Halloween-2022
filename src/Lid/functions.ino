@@ -58,18 +58,18 @@ void closeTheLid() {
 
 
 
-// ---------- eyes ----------
+// ---------- eyes (blink)----------
 void eyes_ON() {
   analogWrite(EYES_PIN, eyesVal);
   eyesLED_onTime.stop();                           //Stop the ON timer
-  eyesLED_offTime.setdelay(random(2500, 6000));    //LED will be on for this time.
+  eyesLED_offTime.setdelay(random(5000, 8000));    //LED will be on for this time.
   eyesLED_offTime.start();                         //Start the OFF timer
 }
 
 void eyes_OFF() {
   analogWrite(EYES_PIN, 0);                        //Turn off the eyes LED
   eyesLED_offTime.stop();                          //Stop the OFF timer
-  eyesLED_onTime.setdelay(random(150, 300));       //LED will be off for this time.
+  eyesLED_onTime.setdelay(random(100, 200));       //LED will be off for this time.
   eyesLED_onTime.start();                          //Start the ON timer
 }
 
@@ -93,6 +93,7 @@ void peek_ON() {
   //The peek ON timer has dinged.
   //Open the lid, stop the ON timer then start the OFF timer.
   openTheLid();
+  client.publish ("tail/cmnd", "wag");
   peekOnTime.stop();                                //Stop the ON timer
   peekOffTime.setdelay(random(1000, 5000));         //Lid will be open for this time.
   peekOffTime.start();                              //Start the OFF timer
@@ -100,6 +101,7 @@ void peek_ON() {
 
 void peek_OFF() {
   closeTheLid();
+  client.publish ("tail/cmnd", "slowwag");
   peekOffTime.stop();                              //Stop the OFF timer
   peekOnTime.setdelay(random(15000UL, 30000UL));   //Lid will be closed for this time.
   peekOnTime.start();                              //Start the ON timer
@@ -132,8 +134,11 @@ void doubleclick() {
 
   //Tell the dfPlayer to start.
   client.publish ("dfplayer/cmnd", "roar");
-  //Start the sequence
+  client.publish ("tail/cmnd", "wag");
+  //Start the open/close sequence
   syncClose();
+  //Start the tail twitching
+  client.publish ("tail/cmnd", "slowwag");
 }
 
 

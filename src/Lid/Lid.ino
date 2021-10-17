@@ -1,5 +1,5 @@
 #define SKETCH "lid"
-#define VERSION "7.0"
+#define VERSION "7.1"
 //Version 6.5- Made eyes blink
 //Version 6.6- Using nodelay.h for dimming the eyes
 //Version 6.7- Synchronizing with sounds.
@@ -7,6 +7,7 @@
 //Version 7.0- Syncing sound by beat is not working satisfactorily.
 //             This version just bounces the lid for the duration of the roar.
 //             This version also adds the random peeks.
+//Version 7.1- Added publish to twitch the tail when the lid is raised.
 
 
 /*
