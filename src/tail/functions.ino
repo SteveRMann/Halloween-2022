@@ -134,7 +134,12 @@ void oneTwitch() {
 }
 
 void oneLargeTwitch() {
+  Serial.println(F("oneLargeTwitch()"));
+  largeTwitchTime.stop();
   largeTwitch(1);
+  //Reset the timer for another twitch.
+  largeTwitchTime.setdelay(random(5000, 10000));    //Twitch will repeat for this time.
+  slowWagTime.start();
 }
 
 void oneSlowWag() {
