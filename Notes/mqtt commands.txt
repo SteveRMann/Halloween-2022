@@ -1,4 +1,5 @@
 MQTT commands
+lid/cmnd roar is the master.
 
 tail/cmnd
   wag
@@ -11,8 +12,17 @@ lid/cmnd
   fanOff
   eyesOn
   eyesOff
+  open
+  close
+  openclose
   slowOpen
   slowClose
+  roar			//Publishes ("dfplayer/cmnd", "roar"), then starts the openclose sequence
+  When the lid opens, pblish ("tail/cmnd", "wag");
+  When the lid closes, publish ("tail/cmnd", "slowwag");
+  Button singleClick: Open the lid for one second
+  Button doubleclick: Publishes ("dfplayer/cmnd", "roar"); and ("tail/cmnd", "wag");
+
   
 eggDrop/cmnd
   reset
@@ -31,6 +41,7 @@ dfplayer/cmnd
   next
   volup
   voldn
+  roar			//Restarts track1 loop.
   
 syncTopic,"lid/cmnd/sync"
   Subscribed to in dfplayer
