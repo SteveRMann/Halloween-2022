@@ -15,7 +15,7 @@ void loop() {
   peekOnTime.update();
   peekOffTime.update();
   
-  menu();
+  //menu();
   //syncCheck();              //Check the sync status.
   eyes_DIM();
 

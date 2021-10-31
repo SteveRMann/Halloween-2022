@@ -25,24 +25,32 @@ void beginSerial() {
 // ---------- Functions unique to this sketch ----------
 // ========= Start the motor =========
 void startTheMotor() {
+    ///Serial.println(F("in startTheMotor()"));
+    ///Serial.print(F("openSwitch= "));
+    ///Serial.println(digitalRead(openSwitch));
+    ///Serial.print(F("closedSwitch= "));
+    ///Serial.println(digitalRead(closedSwitch));
   analogWrite(motorPin, 255);        //Turn on the motor (max torque)
   //While either switch is closed, wait until motor is past the stop switces.
-  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) {
+  while (!digitalRead(openSwitch) || !digitalRead(closedSwitch)) {
     yield();
+    Serial.print(F(":"));
   }
   analogWrite(motorPin, 150);        //Slow it down
+  ///Serial.println(F("end of startTheMotor()"));
 }
 
 
 // ---------- Open the lid ----------
 void openTheLid() {
+  ///Serial.println(F("in openTheLid()"));
   analogWrite(FAN_PIN, FAN_MAX);      //Every time we open the lid, turn the fan and eyes up to max.
   eyesVal = EYES_MAX;
   analogWrite(EYES_PIN, eyesVal);
 
   startTheMotor();
 
-  while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
+  while (digitalRead(openSwitch)) yield();    //Wait for the limit switch to close (=0)
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.println(F("OPEN"));
 }
@@ -121,6 +129,7 @@ void singleClick() {
 
 void doubleclick() {
   //Start a sync to the sound
+  //Same as ROAR
 
   Serial.println(F("Start a sync to the sound."));
   Serial.print(F("Num of elements in syncTbl= "));
