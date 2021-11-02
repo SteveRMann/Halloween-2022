@@ -25,17 +25,21 @@ void beginSerial() {
 // ---------- Functions unique to this sketch ----------
 // ========= Start the motor =========
 void startTheMotor() {
-    ///Serial.println(F("in startTheMotor()"));
-    ///Serial.print(F("openSwitch= "));
-    ///Serial.println(digitalRead(openSwitch));
-    ///Serial.print(F("closedSwitch= "));
-    ///Serial.println(digitalRead(closedSwitch));
+  ///Serial.println(F("in startTheMotor()"));
+  ///Serial.print(F("openSwitch= "));
+  ///Serial.println(digitalRead(openSwitch));
+  ///Serial.print(F("closedSwitch= "));
+  ///Serial.println(digitalRead(closedSwitch));
   analogWrite(motorPin, 255);        //Turn on the motor (max torque)
-  //While either switch is closed, wait until motor is past the stop switces.
+
+#ifndef simulation
+  //While either switch is closed, wait until motor is past the stop switches.
   while (!digitalRead(openSwitch) || !digitalRead(closedSwitch)) {
     yield();
     Serial.print(F(":"));
   }
+#endif
+
   analogWrite(motorPin, 150);        //Slow it down
   ///Serial.println(F("end of startTheMotor()"));
 }
@@ -50,7 +54,10 @@ void openTheLid() {
 
   startTheMotor();
 
+#ifndef simulation
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch to close (=0)
+#endif
+
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.println(F("OPEN"));
 }
@@ -59,7 +66,11 @@ void openTheLid() {
 void closeTheLid() {
   analogWrite(FAN_PIN, FAN_MIN);
   startTheMotor();
+
+#ifndef simulation
   while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
+#endif
+
   analogWrite(motorPin, 0);                   //Stop the motor
   Serial.println(F("CLOSED"));
 }

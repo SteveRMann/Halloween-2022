@@ -17,6 +17,7 @@
    and randomly.
 */
 
+//#define simulation                  //If defined, simulate the limit switches
 
 const int LED_ON = 1;
 const int LED_OFF = 0;
