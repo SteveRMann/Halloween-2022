@@ -7,6 +7,7 @@ Pumpkin Videos/*.eml
 Pumpkin Videos/*.mp4
 Sounds/Growls/*.sfk
 Sounds/Growls/*.bak
+Photos/*.*
 ~$*.xlsx
 
 ######## Ignore list for Eagle, a PCB layout tool ##########
