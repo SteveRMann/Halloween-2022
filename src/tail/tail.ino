@@ -1,5 +1,6 @@
 #define SKETCH "tail"
-#define VERSION "2.0"
+#define VERSION "2.1"
+// Version 2.1- Added noDelay() to twitch the tail every few seconds
 
 //GPIO Pins
 const int MOTOR1 = D1;
@@ -8,6 +9,24 @@ const int BUTTON_PIN = D3;
 
 
 #include <ArduinoOTA.h>
+
+// --------------- noDelay ---------------
+#include <NoDelay.h>
+
+// prototypes (noDelay callbacks)
+void oneWag();
+void oneTwitch();
+void oneLargeTwitch();
+void oneSlowWag();
+
+//Create noDelay objects
+noDelay wagTime(1000, oneWag, false);
+noDelay twitchTime(1000, oneTwitch, false);
+noDelay largeTwitchTime(1000, oneLargeTwitch, false);
+noDelay slowWagTime(1000, oneSlowWag, false);
+
+
+
 
 //--------------- WiFi declarations ---------------
 // WiFi declarations

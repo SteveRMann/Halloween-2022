@@ -12,17 +12,17 @@ void setup() {
 
 
   //This makes the GPIO pins float.
-  pinMode(D5, INPUT);                   //Track 1
-  pinMode(D6, INPUT);                   //Play/Pause
-  pinMode(D1, INPUT);                   //Prev/Vol-
-  pinMode(D2, INPUT);                   //Next/Vol+
-  pinMode(D3, INPUT);                   //Track 2
+  pinMode(TRACK1_PIN, INPUT);         //D5
+  pinMode(PLAY_PAUSE_PIN, INPUT);     //D6
+  pinMode(PREV_VOLdn_PIN, INPUT);     //D1
+  pinMode(NEXT_VOLup_PIN, INPUT);     //D2
+  pinMode(TRACK2_PIN, INPUT);         //D3
   drawMenu();
 
   delay(1000);
-  pulse(PLAY_PAUSE_PIN);                //Always start here?
+  pulse(PLAY_PAUSE_PIN);              //Always start here?
   delay(1000);
-  hold(TRACK1_PIN);                     //Loop track 1
+  hold(TRACK1_PIN);                   //Loop track 1
   delay(2000);
   //pulse(PLAY_PAUSE_PIN);
 }

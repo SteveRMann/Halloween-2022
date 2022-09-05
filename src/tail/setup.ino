@@ -26,4 +26,8 @@ void setup() {
 
   twitch(1);
   drawMenu();
+
+  //Start the timers
+  //oneSlowWag();
+  oneLargeTwitch();
 }

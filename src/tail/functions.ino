@@ -122,3 +122,31 @@ void longPress() {
   Serial.println(F("longPress=wag(2)"));
   wag(2);
 }
+
+
+// ---------- noDelay functions ----------
+void oneWag() {
+  wag(1);
+}
+
+void oneTwitch() {
+  twitch(1);
+}
+
+void oneLargeTwitch() {
+  Serial.println(F("oneLargeTwitch()"));
+  largeTwitchTime.stop();
+  largeTwitch(1);
+  //Reset the timer for another twitch.
+  largeTwitchTime.setdelay(random(5000, 10000));    //Twitch will repeat for this time.
+  slowWagTime.start();
+}
+
+void oneSlowWag() {
+  Serial.println(F("oneSlowWag()"));
+  slowWagTime.stop();
+  slowWag(1);
+  //Reset the timer for another wag.
+  slowWagTime.setdelay(random(5000, 10000));    //Wag will repeat for this time.
+  slowWagTime.start();
+}

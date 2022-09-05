@@ -6,6 +6,8 @@
 void callback(String topic, byte * payload, unsigned int length) {
   char message[length + 1];
 
+  Serial.println(F("MQTT callback"));
+
   // copy contents of payload to message
   // convert the payload from a byte array to a char array
   memcpy(message, payload, length);
@@ -105,6 +107,7 @@ void callback(String topic, byte * payload, unsigned int length) {
 
 
     if (!strcmp(message, "roar")) {
+      Serial.println(F("cmnd ROAR received"));
       //Tell the sound board to start
       client.publish ("dfplayer/cmnd", "roar");
       //Start the open/close sequence.
@@ -114,14 +117,6 @@ void callback(String topic, byte * payload, unsigned int length) {
 
 
 
-
-  // --------- syncTopic ---------
-  if (topic == syncTopic) {
-    //Start the open/close sequence.
-    //dfplayer.ino also subscribes to this topic.
-    Serial.println(F("Roar"));
-    syncClose();                    //Close the lid and start the sync open timer.
-  }
 
 
 } //callback
