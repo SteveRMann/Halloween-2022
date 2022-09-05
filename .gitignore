@@ -1,11 +1,14 @@
 AtmosFx Download Link.txt
 Pumpkin Videos/Jack-O-Lantern Jamboree 3*
+Pumpkin Videos/*.eml
+Pumpkin Videos/*.mp4
 Pumpkin Videos/*.bak
 Pumpkin Videos/*.zip
 Pumpkin Videos/*.sfk
 Sounds/Growls/*.sfk
 Sounds/Growls/*.bak
 ~$*.xlsx
+
 
 ######## Ignore list for Eagle, a PCB layout tool ##########
 
