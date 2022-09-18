@@ -9,6 +9,8 @@ Sounds/Growls/*.sfk
 Sounds/Growls/*.bak
 ~$*.xlsx
 
+# Audacity project files
+*.aup
 
 ######## Ignore list for Eagle, a PCB layout tool ##########
 
