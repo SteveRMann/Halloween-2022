@@ -29,12 +29,19 @@ void mqttReconnect() {
 
 // ==================================  mqttConnect ==================================
 void mqttConnect() {
+  // create client ID from mac address
+  byte mac[5];
+  WiFi.macAddress(mac); // get mac address
+  String clientID = String(mac[0]) + String(mac[4]) ; // use mac address to create clientID
+
   client.setServer(mqttServer, mqttPort); //Call the setServer method
   while (!client.connected()) {
     Serial.print(F("MQTT connecting..."));
-    if (client.connect(hostName)) {
+    if (client.connect(clientID.c_str())) {    //Was hostName
       Serial.println(F("connected"));
-
+      Serial.print(F("clientID: "));
+      Serial.print(clientID);
+      Serial.println();
       client.setCallback(callback);
 
       //Subscriptions:
@@ -73,24 +80,9 @@ void callback(String topic, byte * payload, unsigned int length) {
     }
   }
 
-
-  Serial.println();
-  Serial.println();
-  Serial.print(F("Message arrived on topic: "));
-  Serial.print(topic);
-  Serial.println(F("."));
-
-  Serial.print("message: ");
-  Serial.println(message);
-  Serial.print(F("Length= "));
-  Serial.print(strlen(message));
-  Serial.println();
-
   // If the message terminates in a line-feed, make it the terminating null char.
   int j = strlen(message) - 1;
   if (message[j] == 10) message[j] = '\0';
-
-
 
   // --------- Command ---------
   if (topic == cmndTopic) {                    // Process incoming commands
@@ -98,13 +90,71 @@ void callback(String topic, byte * payload, unsigned int length) {
     Serial.print(message);
     Serial.println(F("'"));
 
-    //Sample handling of a command
-    if (!strcmp(message, "reset")) {
-      //Close both servos.
-      Serial.println(F("Close both servos"));
-      //dropServoClose();
-      //loadServoClose();
+    //Handle the command
+    if (!strcmp(message, "1")) {
+      Serial.println(F("Play Track 1"));
+      pulse(TRACK1_PIN);
+      return;
     }
+
+    if (!strcmp(message, "2")) {
+      Serial.println(F("Play Track 2"));
+      pulse(TRACK2_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "3")) {
+      Serial.println(F("Loop Track 1"));
+      hold(TRACK1_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "4")) {
+      Serial.println(F("Loop Track 2"));
+      hold(TRACK2_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "5")) {
+      Serial.println(F("Play/Pause"));
+      pulse(PLAY_PAUSE_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "6")) {
+      Serial.println(F("Previous Track"));
+      pulse(PREV_VOLdn_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "7")) {
+      Serial.println(F("Next Track"));
+      pulse(NEXT_VOLup_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "-")) {
+      Serial.println(F("Volume Down"));
+      hold(PREV_VOLdn_PIN);
+      return;
+    }
+
+    if (!strcmp(message, "+")) {
+      Serial.println(F("Volume Up"));
+      hold(NEXT_VOLup_PIN);
+      return;
+    }
+
+    //Catch all:
+    Serial.println();
+    Serial.print(F("Message arrived on topic: "));
+    Serial.println(topic);
+
+    Serial.print("message: ");
+    Serial.println(message);
+    //  Serial.print(F("Length= "));
+    //  Serial.print(strlen(message));
+    Serial.println();
 
   }
 } //callback
