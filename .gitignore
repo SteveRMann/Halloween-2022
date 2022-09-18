@@ -12,6 +12,18 @@ Sounds/Growls/*.bak
 # Audacity project files
 *.aup
 
+#### Sony Vegas ####
+# Very large video files
+*.mp4
+*.m4v
+*.avi
+
+# Vegas backup files
+*.veg.bak
+*.sfl
+*.sfk
+
+
 ######## Ignore list for Eagle, a PCB layout tool ##########
 
 # Backup files
