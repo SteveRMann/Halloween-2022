@@ -1,0 +1,34 @@
+Musicals (Green)
+----------------
+JOL2_Hobnobbin Goblins
+JOL2_Ode to Halloween
+JOL2_Welcome to Our Haunt
+JOL2_Witching Hour
+Jolj3 Addams Family
+Jolj3 Ghostbusters
+Jolj3 Monster Mash
+Jolj3 Itsy Bitsy Critters
+Jolj3 Its Halloween Tonight
+
+
+Tales (Blue)
+------------
+JOL2_Lord of the Gourds
+JOL2_The Raven
+Jolj3 Sleepy Hollow
+Jolj3 Haunted Houses
+
+
+Jokes (Red)
+-----------
+JOL2_Treater Greeters
+JOL2_Heckling Hijinks
+Jolj3 Halloween Is So Much Fun
+Jolj3 Halloween Limericks
+
+
+Scares (Violet)
+---------------
+JOL2 Alternating Scares
+JOL2 Scaring in unison
+JOL2_Scaring Each Other
