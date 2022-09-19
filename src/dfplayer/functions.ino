@@ -24,24 +24,3 @@ void beginSerial() {
 }
 
 // ---------- Functions unique to this sketch ----------
-// pulse() and hold() take as argument the GPIO pins on the
-// switches for playing track 1 or track 2:
-// TRACK1_PIN and TRACK2_PIN.
-
-void pulse(int d) {
-  Serial.print(F("Pulse: "));
-  Serial.println(d);
-  digitalWrite(d, 0);
-  pinMode(d, OUTPUT);
-  delay(200);
-  pinMode(d, INPUT);
-}
-
-void hold(int d) {
-  Serial.print(F("Hold: "));
-  Serial.println(d);
-  digitalWrite(d, 0);
-  pinMode(d, OUTPUT);
-  delay(2000);
-  pinMode(d, INPUT);
-}

@@ -1,18 +1,17 @@
 #define SKETCH "dfplayer"
-#define VERSION "1.4"
-// Version 1.4- Added sync command (lid/cmnd roar).
+#define VERSION "1.1"
 
+//Version 1.1, changed hostname in mqtt.ino
 
 /*
-  Control the DFPlayer ADKEY1 pin through a GPIO port.
+  Control the DFPlayer ADKEY1 pin through GPIO ports.
 */
 
-const int TRACK1_PIN = D5;          //GPIO14
-const int TRACK2_PIN = D3;          //GPIO0
-const int PLAY_PAUSE_PIN = D6;      //GPIO12
+const int TRACK1_PIN = D5;
+const int TRACK2_PIN = D3;
+const int PLAY_PAUSE_PIN = D6;
 const int PREV_VOLdn_PIN = D1;
 const int NEXT_VOLup_PIN = D2;
-//D4 is LED_BUILTIN on Wemos D1 Mini
 //const int TX_PIN = D7;
 //const int RX_PIN = D8;
 
@@ -49,8 +48,6 @@ const int mqttPort = 1883;
 char statusTopic[20];
 char cmndTopic[20];
 char rssiTopic[20];
-char syncTopic[20];
-
 
 //--------------- OTA declarations ---------------
 #include <ArduinoOTA.h>

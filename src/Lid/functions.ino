@@ -138,8 +138,10 @@ void doubleclick() {
 
   //Tell the dfPlayer to start.
   client.publish ("dfplayer/cmnd", "1");
+  client.publish ("dfplayer/cmnd", "1");
   Serial.print(F("MQTT Publish: "));
-  Serial.println('"dfplayer/cmnd", "1"');
+  Serial.print(F("dfplayer/cmnd, "));
+  Serial.println(F("1"));
   //Start the sequence
   syncClose();
 }

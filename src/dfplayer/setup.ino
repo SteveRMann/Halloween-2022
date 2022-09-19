@@ -19,10 +19,7 @@ void setup() {
   pinMode(D3, INPUT);                   //Track 2
   drawMenu();
 
-  delay(1000);
-  pulse(PLAY_PAUSE_PIN);                //Always start here?
-  delay(1000);
-  hold(TRACK1_PIN);                     //Loop track 1
-  delay(2000);
-  //pulse(PLAY_PAUSE_PIN);
+  //pulse(PLAY_PAUSE_PIN);                //Always start here?
+  //delay(1000);
+  pulse(TRACK1_PIN);                    //PLay track 1 once.
 }

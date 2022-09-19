@@ -109,9 +109,10 @@ void callback(String topic, byte * payload, unsigned int length) {
 
     if (!strcmp(message, "roar")) {
       //Tell the sound board to start
-      client.publish ("dfplayer/cmnd", "roar");
+      client.publish ("dfplayer/cmnd", "1");
       Serial.print(F("MQTT Publish: "));
-      Serial.println('"dfplayer/cmnd", "roar"');
+      Serial.print(F("dfplayer/cmnd, "));
+      Serial.println(F("1"));
       //Start the open/close sequence.
       syncClose();                    //Close the lid and start the sync open timer.
     }

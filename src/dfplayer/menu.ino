@@ -42,6 +42,8 @@ void menu() {
       c = '0';
     }
 
+    //Note about pause/play
+    //Press Pause/Play, and no other buttons will work until the sound file completes.
     if (c == '5') {               //Pause/Play
       pulse(PLAY_PAUSE_PIN);
       c = '0';
@@ -71,6 +73,19 @@ void menu() {
 }
 
 
+void pulse(int d) {
+  pinMode(d, OUTPUT);
+  digitalWrite(d, 0);
+  delay(100);
+  pinMode(d, INPUT);
+}
+
+void hold(int d) {
+  pinMode(d, OUTPUT);
+  digitalWrite(d, 0);
+  delay(2000);
+  pinMode(d, INPUT);
+}
 
 
 void drawMenu() {
