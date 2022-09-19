@@ -52,7 +52,7 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
   Serial.println();
-  Serial.println(F("NoDelay-Function-Experiments.ino"));
+  Serial.println(F("NoDelay-Function-Eyes.ino"));
   Serial.println();
 
   pinMode(LED_PEEK_PIN, OUTPUT);
