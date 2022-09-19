@@ -1,14 +1,13 @@
-#define SKETCH "lid"
-#define VERSION "6.7"
+#define SKETCH "lid.ino"
+#define VERSION "6.8"
 //Version 6.5- Made eyes blink
 //Version 6.6- Using nodelay.h for dimming the eyes
 //Version 6.7- Synchronizing with sounds.
 //             Starts when MQTT topic lid/cmnd + message "roar" is received.
-
+//Version 6.8- WIP Removed all sync functions to simplify the code.
 
 /*
    Using Wemos D1 Mini
-
    Project is a monster box. The motor slightly opens the box periodically
    and randomly.
 */

@@ -32,12 +32,20 @@ void mqttReconnect() {
 
 // ==================================  mqttConnect ==================================
 void mqttConnect() {
+  // create client ID from mac address
+  byte mac[5];
+  WiFi.macAddress(mac); // get mac address
+  String clientID = String(mac[0]) + String(mac[4]) ; // use mac address to create clientID
+
   client.setServer(mqttServer, mqttPort); //Call the setServer method
   while (!client.connected()) {
     Serial.print(F("MQTT connecting..."));
-    if (client.connect(hostName)) {
+    if (client.connect(clientID.c_str())) {
+      ////    if (client.connect(hostName)) {
       Serial.println(F("connected"));
-
+      Serial.print(F("clientID: "));
+      Serial.print(clientID);
+      Serial.println();
       client.setCallback(callback);
 
       //Subscriptions:

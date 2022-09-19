@@ -1,7 +1,6 @@
 
 // ==================================  mqtt callback ==================================
 // This function is executed when some device publishes a message to a topic that this ESP8266 is subscribed to.
-// The MQTT payload is the filename of the message to play when the phone is picked up.  The payload is case-sensitive.
 //
 void callback(String topic, byte * payload, unsigned int length) {
   char message[length + 1];
@@ -92,6 +91,10 @@ void callback(String topic, byte * payload, unsigned int length) {
 
     if (!strcmp(message, "help")) {
       client.publish (statusTopic, "MQTT commands: fanon fanoff eyeson eyesoff open close roar");
+      Serial.print(F("MQTT Publish: "));
+      Serial.print(statusTopic);
+      Serial.println(", MQTT commands: fanon fanoff eyeson eyesoff open close roar");
+
       //Print the available commands
       //Serial.println(F("Commands: "));
       //Serial.println(F("fanOn -  Turn on the mist fan."));
@@ -107,6 +110,8 @@ void callback(String topic, byte * payload, unsigned int length) {
     if (!strcmp(message, "roar")) {
       //Tell the sound board to start
       client.publish ("dfplayer/cmnd", "roar");
+      Serial.print(F("MQTT Publish: "));
+      Serial.println('"dfplayer/cmnd", "roar"');
       //Start the open/close sequence.
       syncClose();                    //Close the lid and start the sync open timer.
     }

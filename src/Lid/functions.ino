@@ -102,11 +102,26 @@ void peek_OFF() {
 // ---------- button functions ----------
 void singleClick() {
   Serial.println(F("singleClick"));
+
+  // Turn on bubbles
+  //Sound
+  client.publish ("dfplayer/cmnd", "1");
+  Serial.print(F("MQTT Publish: "));
+  Serial.print(F("dfplayer/cmnd, "));
+  Serial.println(F("1"));
+
   //Open the lid for one second
   openTheLid();
   delay(1000);
   closeTheLid();
+
+  // Turn off bubbles
+  //client.publish ("dfplayer/cmnd", "5");
+  //Serial.print(F("MQTT Publish: "));
+  //Serial.println('"dfplayer/cmnd", "5"');
+  
 }
+
 
 void doubleclick() {
   //Start a sync to the sound
@@ -122,7 +137,9 @@ void doubleclick() {
 */
 
   //Tell the dfPlayer to start.
-  client.publish ("dfplayer/cmnd", "roar");
+  client.publish ("dfplayer/cmnd", "1");
+  Serial.print(F("MQTT Publish: "));
+  Serial.println('"dfplayer/cmnd", "1"');
   //Start the sequence
   syncClose();
 }
