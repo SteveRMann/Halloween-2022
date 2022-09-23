@@ -25,9 +25,9 @@ void beginSerial() {
 // ---------- Functions unique to this sketch ----------
 // ========= Start the motor =========
 void startTheMotor() {
-  analogWrite(motorPin, maxTorque);          //Turn on the motor (max torque) to get it started.
+  analogWrite(MOTOR_PIN, maxTorque);          //Turn on the motor (max torque) to get it started.
   while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is not on a stop switch.
-  analogWrite(motorPin, runTorque);          //Slow it down
+  analogWrite(MOTOR_PIN, runTorque);          //Slow it down
 }
 
 
@@ -40,18 +40,31 @@ void openTheLid() {
   startTheMotor();
 
   while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
-  analogWrite(motorPin, 0);                   //Stop the motor
+  analogWrite(MOTOR_PIN, 0);                   //Stop the motor
 
   Serial.println(F("OPEN"));
 }
 
 // ---------- Close the lid ----------
 void closeTheLid() {
+  lidCloseTime.stop();                              //Make sure the random timer is off
   analogWrite(FAN_PIN, FAN_MIN);
   startTheMotor();
-  while (digitalRead(closedSwitch)) yield();  //Wait for the limit switch
-  analogWrite(motorPin, 0);                   //Stop the motor
+  while (digitalRead(closedSwitch)) yield();        //Wait for the limit switch
+  analogWrite(MOTOR_PIN, 0);                        //Stop the motor
   Serial.println(F("CLOSED"));
+}
+
+
+// ---------- Open lid for a random time ----------
+void lidRandom() {
+  int openTime = random(2500, 6000);
+  Serial.print(F("Opening lid for "));
+  Serial.print(openTime);
+  Serial.println(F(" ms"));
+  openTheLid();
+  delay(openTime);
+  closeTheLid();
 }
 
 
@@ -59,7 +72,7 @@ void closeTheLid() {
 void eyes_ON() {
   analogWrite(EYES_PIN, eyesVal);
   eyesLED_onTime.stop();                           //Stop the ON timer
-  eyesLED_offTime.setdelay(random(2500, 6000));    //LED will be on for this time.
+  eyesLED_offTime.setdelay(random(2000, 5000));    //LED will be on for this time.
   eyesLED_offTime.start();                         //Start the OFF timer
 }
 
@@ -80,33 +93,17 @@ void eyes_DIM() {
 }
 
 
-void peek_ON() {
-  //The peek ON timer has dinged.
-  //Turn on the LED, stop the ON timer then start the OFF timer.
-  ///openTheLid();
-  ///peekOnTime.stop();                                //Stop the ON timer
-  ///peekOffTime.setdelay(random(1000, 5000));         //Lid will be open for this time.
-  ///peekOffTime.start();                              //Start the OFF timer
-}
-
-void peek_OFF() {
-  ///closeTheLid();
-  ///peekOffTime.stop();                              //Stop the OFF timer
-  ///peekOnTime.setdelay(random(1000, 6000));         //Lid will be closed for this time.
-  ///peekOnTime.start();                              //Start the ON timer
-}
-
 
 
 
 // ---------- button functions ----------
 void singleClick() {
+  randomFlag = false;                      //Stop random opens
   Serial.println(F("singleClick"));
 
   // Turn on bubbles
   //Sound
   client.publish ("dfplayer/cmnd", "1");
-  Serial.print(F("MQTT Publish: "));
   Serial.print(F("dfplayer/cmnd, "));
   Serial.println(F("1"));
 
@@ -117,77 +114,25 @@ void singleClick() {
 
   // Turn off bubbles
   //client.publish ("dfplayer/cmnd", "5");
-  //Serial.print(F("MQTT Publish: "));
   //Serial.println('"dfplayer/cmnd", "5"');
 
 }
 
 
 void doubleclick() {
-  //Start a sync to the sound
-  /*
-    Serial.println(F("Start a sync to the sound."));
-    Serial.print(F("Num of elements in syncTbl= "));
-    Serial.println(tblN);
-    for (int i = 0; i < tblN; i++) {                      //For debugging, show the time points
-      Serial.print(syncTbl[i]);
-      Serial.print(F(", "));
-    }
-    Serial.println();
-  */
-
+  randomFlag = false;                      //Stop random opens
   //Tell the dfPlayer to start.
   //client.publish ("dfplayer/cmnd", "1");
   client.publish ("dfplayer/cmnd", "1");
-  Serial.print(F("MQTT Publish: "));
   Serial.print(F("dfplayer/cmnd, "));
   Serial.println(F("1"));
   //Start the sequence
-  syncClose();
 }
 
 
 
 void longPress() {
+  randomFlag = true;
   Serial.println(F("longPress"));
-}
-
-
-// ---------- sync ----------
-//When started, this function cycles through the sync timer table, syncTbl[]
-//The sequence is started by calling syncClose().
-void syncOpen() {
-  sync_open_timer.stop();
-  openTheLid();
-  Serial.print(F("Open at point# "));
-  Serial.print(syncPtr);
-  Serial.print(F(", "));
-  Serial.print(syncTbl[syncPtr]);
-  Serial.println(F(" ms."));
-  sync_close_timer.setdelay(syncTbl[syncPtr++]);
-  sync_close_timer.start();
-
-  if (syncPtr > tblN) {         //When we run out of time points, stop the timers.
-    sync_open_timer.stop();
-    sync_close_timer.stop();
-    syncPtr = 0;
-  }
-}
-
-void syncClose() {
-  sync_close_timer.stop();
-  closeTheLid();
-  Serial.print(F("Close at point# "));
-  Serial.print(syncPtr);
-  Serial.print(F(", "));
-  Serial.print(syncTbl[syncPtr]);
-  Serial.println(F(" ms."));
-  sync_open_timer.setdelay(syncTbl[syncPtr++]);
-  sync_open_timer.start();
-
-  if (syncPtr > tblN) {         //When we run out of time points, stop the timers.
-    sync_open_timer.stop();
-    sync_close_timer.stop();
-    syncPtr = 0;
-  }
+  lidRandom();                                      //Open the lid for a random time
 }

@@ -16,13 +16,13 @@
 const int LED_ON = 1;
 const int LED_OFF = 0;
 
-const int motorPin = D3;                  //Controls the motor. (violet)
+const int MOTOR_PIN = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
 const int EYES_PIN = D5;
 const int FAN_PIN = D6;
 const int maxTorque = 255;
-#define SIMULATION                         
+#define SIMULATION
 #ifdef SIMULATION                         //The simulation motor needs more torque to start
 const int runTorque = maxTorque;
 #else
@@ -37,7 +37,7 @@ const int MIN_PWM = 200;                  //Anything lower and the motor won't s
 int motorPwm = MIN_PWM;                   //PWM value for motor on.
 int lidState;
 int bounceCount = 0;
-
+bool randomFlag=false;                    //Set true to open/close untill stopped.
 
 // --------------- noDelay ---------------
 #include <NoDelay.h>
@@ -46,53 +46,18 @@ int bounceCount = 0;
 void eyes_ON();
 void eyes_OFF();
 void eyes_DIM();
-void syncOpen();
-void syncClose();
+void lidRandom();
+
 
 
 //Create noDelay objects
+// objName(time,callback,isEnabled);
 noDelay eyesLED_onTime(1000, eyes_ON , false);
 noDelay eyesLED_offTime(1000, eyes_OFF, false);
 noDelay eyesLED_dim(200, eyes_DIM , true);           //How fast to dim the LED. Lower is faster
-noDelay sync_open_timer(100, syncOpen , false);
-noDelay sync_close_timer(100, syncClose , false);
+noDelay lidOpenTime(1000, lidRandom, false);
+noDelay lidCloseTime(2000, closeTheLid, false);
 
-
-
-// --------------- lid sync timing ---------------
-// These are the time points for the lid state change
-// Odd is open, even is close.
-
-/* Saved for the monster roar sounds.
-const int t0 = 0;         //cmnd received
-const int t1 = 467;       //ms until first open
-const int t2 = 1067;
-const int t3 = 2102;
-const int t4 = 2702;
-const int t5 = 3470;
-const int t6 = 4070;
-const int t7 = 5038;
-const int t8 = 5638;
-const int t9 = 6673;
-const int t10 = 7273;
-*/
-
-const int t0 = 0;         //cmnd received
-const int t1 = 467;       //ms until first open
-const int t2 = 1067;
-const int t3 = 2102;
-const int t4 = 2702;
-const int t5 = 3470;
-const int t6 = 4070;
-const int t7 = 5038;
-const int t8 = 5638;
-const int t9 = 6673;
-const int t10 = 7273;
-
-unsigned int syncTbl[] = {t1 - t0, t2 - t1, t3 - t2, t4 - t3, t5 - t4, t6 - t5, t7 - t6, t8 - t7, t9 - t8, t10 - t9};
-int syncTblPtr = 0;
-int syncPtr = 0;
-int tblN;
 
 
 // --------------- button declarations ---------------
@@ -129,7 +94,6 @@ PubSubClient client(monsterBoxLid);
 char statusTopic[20];
 char cmndTopic[20];
 char rssiTopic[20];
-char syncTopic[20];
 
 const char *mqttServer = MQTT_SERVER;         // Local broker defined in Kaywinnet.h
 const int mqttPort = 1883;

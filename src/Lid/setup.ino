@@ -5,7 +5,7 @@ void setup() {
   //pinMode(buttonPin, INPUT_PULLUP);
   pinMode (BUTTON_PIN, INPUT_PULLUP);
   pinMode(BLUE_LED_PIN, OUTPUT);
-  analogWrite(motorPin, 0);             //PWM pin, start at zero.
+  analogWrite(MOTOR_PIN, 0);             //PWM pin, start at zero.
   pinMode(EYES_PIN, OUTPUT);
   pinMode(FAN_PIN, OUTPUT);
 
@@ -56,13 +56,5 @@ void setup() {
   //Start the timers
   eyes_ON();
   //eyes_OFF();
-
-
-  //Reset the tblPtr (for syncing the lid with sound).
-  syncPtr = 0;
-  tblN = sizeof(syncTbl) / sizeof(syncTbl[0]);      //Number of sync timepoints
-
-  //When started by calling syncClose(), cycle through the sync timer table, syncTbl[]
-  syncClose();
 
 }

@@ -105,29 +105,8 @@ void callback(String topic, byte * payload, unsigned int length) {
       //Serial.println(F("close - Close the lid."));
       //Serial.println(F("Open and Close the lid."));
     }
-
-
-    if (!strcmp(message, "roar")) {
-      //Tell the sound board to start
-      client.publish ("dfplayer/cmnd", "1");
-      Serial.print(F("MQTT Publish: "));
-      Serial.print(F("dfplayer/cmnd, "));
-      Serial.println(F("1"));
-      //Start the open/close sequence.
-      syncClose();                    //Close the lid and start the sync open timer.
-    }
   }
 
-
-
-
-  // --------- syncTopic ---------
-  if (topic == syncTopic) {
-    //Start the open/close sequence.
-    //dfplayer.ino also subscribes to this topic.
-    Serial.println(F("Roar"));
-    syncClose();                    //Close the lid and start the sync open timer.
-  }
 
 
 } //callback

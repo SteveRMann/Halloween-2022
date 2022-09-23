@@ -8,12 +8,18 @@ void loop() {
   eyesLED_onTime.update();
   eyesLED_offTime.update();        //Blink eye
   eyesLED_dim.update();            //Dim eye
-
-  sync_open_timer.update();        //Sync timers
-  sync_close_timer.update();
+  lidOpenTime.update();
+  lidCloseTime.update();
+  if (randomFlag) {
+    int closeTime = random(2500, 6000);
+    Serial.print(F("Closing lid for "));
+    Serial.print(closeTime);
+    Serial.println(F(" ms"));
+    delay(closeTime);
+    lidRandom();                    //Open the lid for a random time
+  }
 
   menu();
-  //syncCheck();              //Check the sync status.
   eyes_DIM();
 
 }
