@@ -1,0 +1,1 @@
+This is a motor controller for the lid simulator

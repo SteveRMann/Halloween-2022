@@ -19,9 +19,16 @@ const int LED_OFF = 0;
 const int motorPin = D3;                  //Controls the motor. (violet)
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
-//const int buttonPin = D4;
 const int EYES_PIN = D5;
 const int FAN_PIN = D6;
+const int maxTorque = 255;
+#define SIMULATION                         
+#ifdef SIMULATION                         //The simulation motor needs more torque to start
+const int runTorque = maxTorque;
+#else
+const int runTorque = 150;
+#endif
+
 
 const long int Minutes = 60000;           //ms per minute
 const long int Seconds = 1000;            //ms per second
@@ -55,6 +62,21 @@ noDelay sync_close_timer(100, syncClose , false);
 // --------------- lid sync timing ---------------
 // These are the time points for the lid state change
 // Odd is open, even is close.
+
+/* Saved for the monster roar sounds.
+const int t0 = 0;         //cmnd received
+const int t1 = 467;       //ms until first open
+const int t2 = 1067;
+const int t3 = 2102;
+const int t4 = 2702;
+const int t5 = 3470;
+const int t6 = 4070;
+const int t7 = 5038;
+const int t8 = 5638;
+const int t9 = 6673;
+const int t10 = 7273;
+*/
+
 const int t0 = 0;         //cmnd received
 const int t1 = 467;       //ms until first open
 const int t2 = 1067;
@@ -69,7 +91,7 @@ const int t10 = 7273;
 
 unsigned int syncTbl[] = {t1 - t0, t2 - t1, t3 - t2, t4 - t3, t5 - t4, t6 - t5, t7 - t6, t8 - t7, t9 - t8, t10 - t9};
 int syncTblPtr = 0;
-int syncPtr=0;
+int syncPtr = 0;
 int tblN;
 
 

@@ -57,7 +57,12 @@ void setup() {
   eyes_ON();
   //eyes_OFF();
 
+
   //Reset the tblPtr (for syncing the lid with sound).
   syncPtr = 0;
   tblN = sizeof(syncTbl) / sizeof(syncTbl[0]);      //Number of sync timepoints
+
+  //When started by calling syncClose(), cycle through the sync timer table, syncTbl[]
+  syncClose();
+
 }

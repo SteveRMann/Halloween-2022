@@ -25,9 +25,9 @@ void beginSerial() {
 // ---------- Functions unique to this sketch ----------
 // ========= Start the motor =========
 void startTheMotor() {
-  analogWrite(motorPin, 255);        //Turn on the motor (max torque)
-  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is past the stop switces.
-  analogWrite(motorPin, 150);        //Slow it down
+  analogWrite(motorPin, maxTorque);          //Turn on the motor (max torque) to get it started.
+  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is not on a stop switch.
+  analogWrite(motorPin, runTorque);          //Slow it down
 }
 
 
@@ -119,25 +119,25 @@ void singleClick() {
   //client.publish ("dfplayer/cmnd", "5");
   //Serial.print(F("MQTT Publish: "));
   //Serial.println('"dfplayer/cmnd", "5"');
-  
+
 }
 
 
 void doubleclick() {
   //Start a sync to the sound
-/*  
-  Serial.println(F("Start a sync to the sound."));
-  Serial.print(F("Num of elements in syncTbl= "));
-  Serial.println(tblN);
-  for (int i = 0; i < tblN; i++) {                      //For debugging, show the time points
-    Serial.print(syncTbl[i]);
-    Serial.print(F(", "));
-  }
-  Serial.println();
-*/
+  /*
+    Serial.println(F("Start a sync to the sound."));
+    Serial.print(F("Num of elements in syncTbl= "));
+    Serial.println(tblN);
+    for (int i = 0; i < tblN; i++) {                      //For debugging, show the time points
+      Serial.print(syncTbl[i]);
+      Serial.print(F(", "));
+    }
+    Serial.println();
+  */
 
   //Tell the dfPlayer to start.
-  client.publish ("dfplayer/cmnd", "1");
+  //client.publish ("dfplayer/cmnd", "1");
   client.publish ("dfplayer/cmnd", "1");
   Serial.print(F("MQTT Publish: "));
   Serial.print(F("dfplayer/cmnd, "));

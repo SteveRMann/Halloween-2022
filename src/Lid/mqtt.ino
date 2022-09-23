@@ -26,6 +26,7 @@ void mqttReconnect() {
   }
   if (!client.loop()) {
     client.connect(hostName);
+    Serial.println(F("Should not get here"));
   }
 }
 
