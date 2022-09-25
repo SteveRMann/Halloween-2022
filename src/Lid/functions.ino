@@ -26,6 +26,7 @@ void beginSerial() {
 // ========= Start the motor =========
 void startTheMotor() {
   analogWrite(MOTOR_PIN, maxTorque);          //Turn on the motor (max torque) to get it started.
+  delay(1);
   ///while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is not on a stop switch.
   analogWrite(MOTOR_PIN, runTorque);          //Slow it down
 }
@@ -79,7 +80,7 @@ void lidRandom() {
 }
 
 
-
+// ---------- eyes ----------
 void eyes_ON() {
   analogWrite(EYES_PIN, eyesVal);
   eyesLED_onTime.stop();                           //Stop the ON timer
@@ -107,7 +108,7 @@ void eyes_DIM() {
 
 
 
-// ---------- button functions ----------
+// ---------- button handlers ----------
 
 // Action Button Interrupt Handler
 IRAM_ATTR void actionButtonHandler() {

@@ -68,4 +68,21 @@ void setup() {
   eyes_ON();
   //eyes_OFF();
 
-}
+/*
+  // ========== MOTORTEST ==========
+  // Neverending function to find the minimum torque needed
+  // to run the motor
+  maxTorque = 255;
+  while (1) {
+    sensorValue = analogRead(sensorPin);
+    runTorque = sensorValue;
+    Serial.print(F("runTorque= "));
+    Serial.println(runTorque);
+    startTheMotor();
+    delay(1000);
+  }
+*/
+
+
+
+} //End of setup()

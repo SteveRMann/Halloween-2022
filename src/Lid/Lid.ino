@@ -19,7 +19,8 @@
 
 const int LED_ON = 1;
 const int LED_OFF = 0;
-
+int sensorPin = A0;    // potentiometer used in motortest (seup.ino)
+int sensorValue = 0;
 
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
@@ -30,13 +31,9 @@ const int FAN_PIN = D6;                   //Mist fan
 const int BLUE_LED_PIN = D8;              //WiFi Status
 const int LOOP_PIN = D7;                  //Loop button
 
-const int maxTorque = 255;
-#define SIMULATION
-#ifdef SIMULATION                         //The simulation motor needs more torque to run
-const int runTorque = 200;
-#else
-const int runTorque = 175;
-#endif
+int maxTorque = 255;
+int runTorque = 165;
+
 
 
 const long int MINUTES = 60000;           //ms per minute
