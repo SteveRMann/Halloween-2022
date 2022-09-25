@@ -28,20 +28,20 @@ void menu() {
       c = '0';
     }
 
-if (c == '5') {
+    if (c == '5') {
       Serial.println(F("5- Fan On"));
       analogWrite(FAN_PIN, 255);
       c = '0';
     }
-    
-if (c == '6') {
+
+    if (c == '6') {
       Serial.println(F("6- Fan Off"));
       analogWrite(FAN_PIN, 0);
       c = '0';
     }
-    
 
-    
+
+
   }
 }
 
@@ -54,5 +54,5 @@ void drawMenu() {
   Serial.println(F( "5) Fan ON" ));
   Serial.println(F( "6) Fan Off" ));
   Serial.println(F( "-----------------------------" ));
-  Serial.print( "? " );
+  Serial.println();
 }

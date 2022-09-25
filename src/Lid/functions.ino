@@ -26,20 +26,26 @@ void beginSerial() {
 // ========= Start the motor =========
 void startTheMotor() {
   analogWrite(MOTOR_PIN, maxTorque);          //Turn on the motor (max torque) to get it started.
-  while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is not on a stop switch.
+  ///while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is not on a stop switch.
   analogWrite(MOTOR_PIN, runTorque);          //Slow it down
 }
 
 
+
 // ---------- Open the lid ----------
 void openTheLid() {
+  // Turn on bubbles sound
+  client.publish ("dfplayer/cmnd", "1");
+  Serial.print(F("dfplayer/cmnd, "));
+  Serial.println(F("1"));
+
   analogWrite(FAN_PIN, FAN_MAX);      //Every time we open the lid, turn the fan and eyes up to max.
   eyesVal = EYES_MAX;
   analogWrite(EYES_PIN, eyesVal);
 
   startTheMotor();
 
-  while (digitalRead(openSwitch)) yield();    //Wait for the limit switch
+  while (digitalRead(openSwitch)) yield();     //Wait for the limit switch
   analogWrite(MOTOR_PIN, 0);                   //Stop the motor
 
   Serial.println(F("OPEN"));
@@ -47,6 +53,11 @@ void openTheLid() {
 
 // ---------- Close the lid ----------
 void closeTheLid() {
+  // Turn off bubbles
+  //client.publish ("dfplayer/cmnd", "5");
+  //Serial.print(F("dfplayer/cmnd, "));
+  //Serial.println(F("5"));
+
   lidCloseTime.stop();                              //Make sure the random timer is off
   analogWrite(FAN_PIN, FAN_MIN);
   startTheMotor();
@@ -97,7 +108,34 @@ void eyes_DIM() {
 
 
 // ---------- button functions ----------
-void singleClick() {
+
+// Action Button Interrupt Handler
+IRAM_ATTR void actionButtonHandler() {
+  static unsigned long last_interrupt_time = 0;
+  unsigned long interrupt_time = millis();
+  //Debounce
+  if (interrupt_time - last_interrupt_time > 250)
+  {
+    buttonFlag = true;
+  }
+  last_interrupt_time = interrupt_time;
+}
+
+// Loop Button Interrupt Handler
+IRAM_ATTR void loopButtonHandler() {
+  static unsigned long last_interrupt_time = 0;
+  unsigned long interrupt_time = millis();
+  //Debounce
+  if (interrupt_time - last_interrupt_time > 250)
+  {
+    loopFlag = true;
+  }
+  last_interrupt_time = interrupt_time;
+}
+
+
+/*
+  void singleClick() {
   randomFlag = false;                      //Stop random opens
   Serial.println(F("singleClick"));
 
@@ -116,10 +154,10 @@ void singleClick() {
   //client.publish ("dfplayer/cmnd", "5");
   //Serial.println('"dfplayer/cmnd", "5"');
 
-}
+  }
 
 
-void doubleclick() {
+  void doubleclick() {
   randomFlag = false;                      //Stop random opens
   //Tell the dfPlayer to start.
   //client.publish ("dfplayer/cmnd", "1");
@@ -127,12 +165,18 @@ void doubleclick() {
   Serial.print(F("dfplayer/cmnd, "));
   Serial.println(F("1"));
   //Start the sequence
-}
+  }
 
 
 
-void longPress() {
+  void longPress() {
   randomFlag = true;
   Serial.println(F("longPress"));
   lidRandom();                                      //Open the lid for a random time
+  }
+*/
+
+void dbgLoopFlg() {
+  Serial.print(F("loopFlag= "));
+  Serial.println(loopFlag);
 }

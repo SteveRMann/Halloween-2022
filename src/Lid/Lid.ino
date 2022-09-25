@@ -1,10 +1,14 @@
 #define SKETCH "lid.ino"
-#define VERSION "6.8"
+#define VERSION "7.0"
+#define NODENAME "cgm"
+
+
 //Version 6.5- Made eyes blink
 //Version 6.6- Using nodelay.h for dimming the eyes
 //Version 6.7- Synchronizing with sounds.
 //             Starts when MQTT topic lid/cmnd + message "roar" is received.
 //Version 6.8- WIP Removed all sync functions to simplify the code.
+//Version 7.0- Use interrupt for buttons.
 
 /*
    Using Wemos D1 Mini
@@ -16,28 +20,34 @@
 const int LED_ON = 1;
 const int LED_OFF = 0;
 
-const int MOTOR_PIN = D3;                  //Controls the motor. (violet)
+
 const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
 const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
-const int EYES_PIN = D5;
-const int FAN_PIN = D6;
+const int MOTOR_PIN = D3;                 //Controls the motor. (violet)
+const int BUTTON_PIN = D4;                //Action button (Also LED_BUILTIN)
+const int EYES_PIN = D5;                  //Eyes
+const int FAN_PIN = D6;                   //Mist fan
+const int BLUE_LED_PIN = D8;              //WiFi Status
+const int LOOP_PIN = D7;                  //Loop button
+
 const int maxTorque = 255;
 #define SIMULATION
-#ifdef SIMULATION                         //The simulation motor needs more torque to start
-const int runTorque = maxTorque;
+#ifdef SIMULATION                         //The simulation motor needs more torque to run
+const int runTorque = 200;
 #else
-const int runTorque = 150;
+const int runTorque = 175;
 #endif
 
 
-const long int Minutes = 60000;           //ms per minute
-const long int Seconds = 1000;            //ms per second
-bool flagMotorOn = false;
+const long int MINUTES = 60000;           //ms per minute
+const long int SECONDS = 1000;            //ms per second
+//bool motorOnFlag = false;
 const int MIN_PWM = 200;                  //Anything lower and the motor won't start
 int motorPwm = MIN_PWM;                   //PWM value for motor on.
-int lidState;
-int bounceCount = 0;
-bool randomFlag=false;                    //Set true to open/close untill stopped.
+// (not used) int lidState;
+// (not used) int bounceCount = 0;
+bool randomFlag = false;                  //Set true to open/close untill stopped.
+
 
 // --------------- noDelay ---------------
 #include <NoDelay.h>
@@ -47,7 +57,7 @@ void eyes_ON();
 void eyes_OFF();
 void eyes_DIM();
 void lidRandom();
-
+void closeTheLid();
 
 
 //Create noDelay objects
@@ -61,18 +71,22 @@ noDelay lidCloseTime(2000, closeTheLid, false);
 
 
 // --------------- button declarations ---------------
-const int BUTTON_PIN = D4;
-#include "OneButton.h"
-OneButton button(BUTTON_PIN);
+volatile bool buttonFlag = false;         //True when sction button is pressed
+volatile bool loopFlag = false;           //True when loop button is pressed
 
 
-//--------------- WiFi declarations ---------------
-// WiFi declarations
-#include <ESP8266WiFi.h>        // Not needed if also using the Arduino OTA Library...
-#include <Kaywinnet.h>          // WiFi credentials
-char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
-char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
-char nodeName[] = SKETCH;       // Give this node a name
+
+//--------------- WiFiMulti declarations ---------------
+#include <ESP8266WiFiMulti.h>
+ESP8266WiFiMulti wifiMulti;
+
+// WiFi connect timeout per AP. Increase when connecting takes longer.
+const uint32_t connectTimeoutMs = 5000;
+
+// setup_wifi vars
+char macBuffer[24];       // Holds the last three digits of the MAC, in hex.
+char hostNamePrefix[] = NODENAME;
+char hostName[12];        // Holds hostNamePrefix + the last three bytes of the MAC address.
 
 
 
@@ -82,6 +96,7 @@ char nodeName[] = SKETCH;       // Give this node a name
 
 
 //--------------- MQTT declarations ---------------
+#include "Kaywinnet.h"
 #include <ESP8266WiFi.h>        // Connect (and reconnect) an ESP8266 to the a WiFi network.
 #include <PubSubClient.h>       // connect to a MQTT broker and publish/subscribe messages in topics.
 // Declare an object of class WiFiClient
@@ -90,6 +105,7 @@ char nodeName[] = SKETCH;       // Give this node a name
 WiFiClient monsterBoxLid;
 PubSubClient client(monsterBoxLid);
 
+// Make the MQTT topics
 // Declare strings for the topics. Topics will be created in setup_mqtt().
 char statusTopic[20];
 char cmndTopic[20];
@@ -101,7 +117,6 @@ const int mqttPort = 1883;
 
 
 //--------------- ticker ---------------
-const int BLUE_LED_PIN = D7;             //D4 is LED_BUILTIN on Wemos D1 Mini
 //for LED status
 #include <Ticker.h>
 Ticker blueTicker;                       //Ticker object for the WiFi Connecting LED

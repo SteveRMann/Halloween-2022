@@ -2,18 +2,18 @@
 // Create topic names
 void setup_mqtt() {
   //MUST follow setupWiFi()
-  strcpy(cmndTopic, nodeName);            //nodeName is defined in the wifi tab.
+  strcpy(cmndTopic, NODENAME);            //nodeName is defined in the wifi tab.
   strcat(cmndTopic, "/cmnd");             //Incoming commands, payload is a command.
-  strcpy(statusTopic, nodeName);
+  strcpy(statusTopic, NODENAME);
   strcat(statusTopic, "/stat");
-  strcpy(rssiTopic, nodeName);
+  strcpy(rssiTopic, NODENAME);
   strcat(rssiTopic, "/rssi");
-
 
   dbugs("cmndTopic= ", cmndTopic);
   dbugs("statusTopic= ", statusTopic);
   dbugs("rssiTopic= ", rssiTopic);
 }
+
 
 
 // ==================================  mqttReconnect ==================================
@@ -43,7 +43,9 @@ void mqttConnect() {
       ////    if (client.connect(hostName)) {
       Serial.println(F("connected"));
       Serial.print(F("clientID: "));
-      Serial.print(clientID);
+      Serial.println(clientID);
+      Serial.print(F("RSSI: "));
+      Serial.println(WiFi.RSSI());
       Serial.println();
       client.setCallback(callback);
 
@@ -56,6 +58,8 @@ void mqttConnect() {
       Serial.print(F("failed, rc="));
       Serial.print(client.state());
       Serial.println(F("- trying again in 5-seconds."));
+      Serial.print(F("RSSI: "));
+      Serial.println(WiFi.RSSI());
       delay(5000);
     }
   }
