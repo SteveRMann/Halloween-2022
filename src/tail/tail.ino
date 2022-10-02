@@ -1,5 +1,9 @@
 #define SKETCH "tail"
-#define VERSION "2.0"
+#define VERSION "3.0"
+#define hostPrefix "TAIL"      // Six characters max
+
+#include "myWiFiMulti.h"
+
 
 //GPIO Pins
 const int MOTOR1 = D1;
@@ -11,11 +15,11 @@ const int BUTTON_PIN = D3;
 
 //--------------- WiFi declarations ---------------
 // WiFi declarations
-#include <ESP8266WiFi.h>        // Not needed if also using the Arduino OTA Library...
-#include <Kaywinnet.h>          // WiFi credentials
-char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
-char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
-char nodeName[] = SKETCH;       // Give this node a name
+///#include <ESP8266WiFi.h>        // Not needed if also using the Arduino OTA Library...
+///#include <Kaywinnet.h>          // WiFi credentials
+///char macBuffer[24];             // Holds the last three digits of the MAC, in hex.
+///char hostName[24];              // Holds nodeName + the last three bytes of the MAC address.
+///char nodeName[] = SKETCH;       // Give this node a name
 
 
 // --------------- ticker declarations ---------------

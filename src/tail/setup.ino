@@ -12,7 +12,8 @@ void setup() {
   Serial.println(F(".ino"));
 
   beginSerial();
-  setup_wifi();                       // MUST be before setupMqtt()
+  //setup_wifi();                       // MUST be before setupMqtt()
+  myWiFiMulti::setup_wifiMulti();     // MUST be before setupMqtt()
   start_OTA();                        // If using OTA
   setup_mqtt();                       // Generate the topics
 
