@@ -21,6 +21,12 @@ AtmosFx Download Link.txt
 *.sfk
 
 
+#### Ignore shortcuts ####
+*.lnk
+
+###Ignore large files ###
+
+
 ######## Ignore list for Eagle, a PCB layout tool ##########
 
 # Backup files
