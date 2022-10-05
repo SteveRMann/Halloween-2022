@@ -30,7 +30,7 @@ void menu() {
 
     if (c == '3') {
       Serial.println(F("2- One slow wag"));
-      slowWag(1);
+//      slowWag(1);
       c = '0';
     }
   }

@@ -1,111 +1,54 @@
 // --------------- General functions ---------------
-// -------------- beginSerial() --------------
-void beginSerial() {
-  while (!Serial);
-  Serial.begin( 115200 );
-  Serial.println();
-  Serial.println();
-  Serial.print(SKETCH);
-  Serial.print(".ino, Version ");
-  Serial.println(VERSION);
-  Serial.println(F("++++++++++++++++++ +"));
-}
-
-// --------------- Function to display a string for debugging. ---------------
-void dbugs(const char *s, const char *v) {
-  //Show a string variable. Enter with the string description and the string.
-  //Example dbugs("My String= ",myString);
-  Serial.print(s);
-  Serial.print (F("\""));
-  Serial.print(v);
-  Serial.println(F("\""));
-}
-
-
-
-// ********************************************
-// --------------- my functions ---------------
 // --------------- Unique to this sketch ---------------
-void forward(int duration) {
-  digitalWrite (MOTOR1, LOW);
-  digitalWrite (MOTOR2, HIGH);
+
+const int SPEED = 24;
+const int HALFSPEED = SPEED / 2;
+const int QUARTERSPEED = HALFSPEED / 2;
+const int FASTSPEED = SPEED * 2;;
+
+
+void motorRun(int pwm, int duration) {
+  motor1.setSpeed(pwm);
   delay (duration);
+  motor1.setSpeed(0);     // Motor 1 stops.
 }
 
-void stop(int duration) {
-  digitalWrite (MOTOR1, LOW);
-  digitalWrite (MOTOR2, LOW);
-  delay (duration);
-}
-
-void reverse(int duration) {
-  digitalWrite (MOTOR1, HIGH);
-  digitalWrite (MOTOR2, LOW);
-  delay (duration);
-}
-
-void forwardSlow(int pwm, int duration) {
-  analogWrite (MOTOR1, pwm);
-  digitalWrite (MOTOR2, LOW);
-  delay (duration);
-}
-
-void reverseSlow(int pwm, int duration) {
-  digitalWrite (MOTOR1, LOW);
-  analogWrite (MOTOR2, pwm);
-  delay (duration);
-}
-
-void rampUp() {
-  digitalWrite (MOTOR2, LOW);
-  for (int i = 0; i < 100; i++) {
-    analogWrite (MOTOR1, i);
-    delay(10);
-  }
-  delay (1000);
-}
 
 void wag(int count) {
   for (int i = 0; i < count; i++) {
-    forwardSlow(300, 100);                  // (int pwm, int duration)
-    //delay(100);
-    stop(125);
-    reverseSlow(300, 100);
-    //delay(100);
-    stop(200);
+    motorRun(SPEED, 500 );               //(int pwm, int duration)
+    stop(500);                              //Stop then pause
+    motorRun(-SPEED, 500);
+    stop(500);
   }
+  motor1.setSpeed(0);
 }
 
 void twitch(int count) {
   for (int i = 0; i < count; i++) {
-    forwardSlow(100, 25);                   // (int pwm, int duration)
-    //delay(100);
-    stop(500);
-    reverseSlow(100, 25);
-    //delay(100);
-    stop(200);
+    motorRun(SPEED, 100 );               //(int pwm, int duration)
+    stop(100);                             //Stop then pause
+    motorRun(-SPEED, 100 );               //(int pwm, int duration)
   }
+  motor1.setSpeed(0);
 }
 
-void largeTwitch(int count) {
-  for (int i = 0; i < count; i++) {
-    forwardSlow(40, 750);                   // (int pwm, int duration)
-    stop(300);
-    reverseSlow(40, 750);
-    stop(200);
-  }
+void stop(int duration) {
+  motor1.setSpeed(0);     // Motor 1 stops.
+  delay (duration);
 }
 
-void slowWag(int count) {
-  for (int i = 0; i < count; i++) {
-    forwardSlow(30, 150);                   // (int pwm, int duration)
-    //delay(100);
-    stop(225);
-    reverseSlow(30, 150);
-    //delay(100);
-    stop(225);
+/*
+  void rampUp() {
+  motor1.setSpeed(0);     // Motor 1 stops.
+  for (int i = 0; i < 128; i++) {
+    motor1.setSpeed(i);   // Motor 1 runs forward
+    delay(10);
   }
-}
+  motor1.setSpeed(0);     // Motor 1 stops.
+  }
+*/
+
 
 // ---------- button functions ----------
 void singleClick() {
@@ -115,7 +58,7 @@ void singleClick() {
 
 void doubleclick() {
   Serial.println(F("doubleClick=largeTwitch(1)"));
-  largeTwitch(1);
+  //largeTwitch(1);
 }
 
 void longPress() {

@@ -1,131 +1,59 @@
-/*
-  HG7881_Motor_Driver_Example - Arduino sketch
+/*******************************************************************************
+   THIS SOFTWARE IS PROVIDED IN AN "AS IS" CONDITION. NO WARRANTY AND SUPPORT
+   IS APPLICABLE TO THIS SOFTWARE IN ANY FORM. CYTRON TECHNOLOGIES SHALL NOT,
+   IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL OR CONSEQUENTIAL
+   DAMAGES, FOR ANY REASON WHATSOEVER.
+ ********************************************************************************
+   DESCRIPTION:
 
-  This example shows how to drive a motor with using HG7881 (L9110) Dual
-  Channel Motor Driver Module.  For simplicity, this example shows how to
-  drive a single motor.  Both channels work the same way.
+   This example shows how to drive 2 motors using 4 PWM pins (2 for each motor)
+   with 2-channel motor driver.
 
-*/
 
-#define SKETCH "HBridgeTest.ino"
-#define MOTOR_PWM D1          // Motor PWM Speed
-#define MOTOR_DIR D2          // Motor Direction
+   CONNECTIONS:
 
-// the actual values for "fast" and "slow" depend on the motor
-#define PWM_SLOW 500           // arbitrary slow speed PWM duty cycle
-#define PWM_FAST 1023          // arbitrary fast speed PWM duty cycle
-#define DIR_DELAY 1000        // brief delay for abrupt motor changes
+   Arduino D3  - Motor Driver PWM 1A Input
+   Arduino D9  - Motor Driver PWM 1B Input
+   Arduino D10 - Motor Driver PWM 2A Input
+   Arduino D11 - Motor Driver PWM 2B Input
+   Arduino GND - Motor Driver GND
 
-void stopMotors() {
-  digitalWrite( MOTOR_DIR, LOW );
-  digitalWrite( MOTOR_PWM, LOW );
-  delay( DIR_DELAY );
+
+   AUTHOR   : Kong Wai Weng
+   COMPANY  : Cytron Technologies Sdn Bhd
+   WEBSITE  : www.cytron.io
+   EMAIL    : support@cytron.io
+
+ *******************************************************************************/
+
+#include "CytronMotorDriver.h"
+
+
+// Configure the motor driver.
+CytronMD motor1(PWM_PWM, D1, D2);   // PWM 1A = Pin D1, PWM 1B = Pin D2.
+//CytronMD motor2(PWM_PWM, D3, D4);   // PWM 2A = Pin 10, PWM 2B = Pin 11.
+
+
+// The setup routine runs once when you press reset.
+void setup() {
+
 }
 
 
-// ------------ setup() ------------
-void setup()
-{
-  Serial.begin( 115200 );
-  Serial.println();
-  Serial.println(SKETCH);
-  pinMode( MOTOR_DIR, OUTPUT );
-  pinMode( MOTOR_PWM, OUTPUT );
-  stopMotors();
-}
+// The loop routine runs over and over again forever.
+// SPEED can be 1-256
+void loop() {
+  const int SPEED = 16;
 
+  motor1.setSpeed(SPEED);   // Motor 1 runs forward
+  delay(1000);
 
-// ------------ loop() ------------
-void loop()
-{
-  bool isValidInput;
+  motor1.setSpeed(0);     // Motor 1 stops.
+  delay(1000);
 
-  // draw a menu on the serial port
-  Serial.println(F( "-----------------------------" ));
-  Serial.println(F( "MENU:" ));
-  Serial.println(F( "1) Forward" ));
-  Serial.println(F( "2) Reverse" ));
-  Serial.println(F( "3) Fast forward" ));
-  Serial.println(F( "4) Forward" ));
-  Serial.println(F( "5) Soft stop (coast)" ));
-  Serial.println(F( "6) Reverse" ));
-  Serial.println(F( "7) Fast reverse" ));
-  Serial.println(F( "8) Hard stop (brake)" ));
-  Serial.println(F( "-----------------------------" ));
+  motor1.setSpeed(-SPEED);  // Motor 1 runs backward
+  delay(1000);
 
-  do {
-    byte c;
-    // get the next character from the serial port
-    Serial.print( "?" );
-    while ( !Serial.available() ) ;
-    c = Serial.read();
-
-    switch ( c )
-    {
-      case '1':                                   // Fast forward
-        Serial.println(F("H-L..."));
-        stopMotors();                             // Stop motors briefly before abrupt changes
-        digitalWrite( MOTOR_DIR, HIGH );          // direction = forward
-        analogWrite( MOTOR_PWM, LOW);
-        isValidInput = true;
-        break;
-
-      case '2':                                   // Fast forward
-        Serial.println(F("L-H..."));
-        stopMotors();                             // Stop motors briefly before abrupt changes
-        digitalWrite( MOTOR_DIR, LOW );          // direction = forward
-        analogWrite( MOTOR_PWM, HIGH);
-        isValidInput = true;
-        break;
-
-      case '3':                                   // Fast forward
-        Serial.println(F("Fast forward..."));
-        stopMotors();                             // Stop motors briefly before abrupt changes
-        digitalWrite( MOTOR_DIR, HIGH );          // direction = forward
-        analogWrite( MOTOR_PWM, PWM_FAST );
-        isValidInput = true;
-        break;
-
-      case '4':                                   // 2= Forward
-        Serial.println( "Forward..." );
-        stopMotors();
-        digitalWrite( MOTOR_DIR, HIGH );          // direction = forward
-        analogWrite( MOTOR_PWM, PWM_SLOW ); // PWM speed = slow
-        isValidInput = true;
-        break;
-
-      case '5':                                   // 3= Soft stop (preferred)
-        Serial.println( "Soft stop (coast)..." );
-        stopMotors();
-        isValidInput = true;
-        break;
-
-      case '6':                                   // 4) Reverse
-        Serial.println( "Fast forward..." );
-        stopMotors();
-        digitalWrite( MOTOR_DIR, LOW );           // direction = reverse
-        analogWrite( MOTOR_PWM, PWM_SLOW );       // PWM speed = slow
-        isValidInput = true;
-        break;
-
-      case '7':                                   // 5= Fast reverse
-        Serial.println( "Fast forward..." );
-        digitalWrite( MOTOR_DIR, LOW );           // direction = reverse
-        analogWrite( MOTOR_PWM, PWM_FAST );       // PWM speed = fast
-        isValidInput = true;
-        break;
-
-      case '8':                                   // 6= Hard stop (use with caution)
-        Serial.println( "Hard stop (brake)..." );
-        digitalWrite( MOTOR_DIR, HIGH );
-        digitalWrite( MOTOR_PWM, HIGH );
-        isValidInput = true;
-        break;
-
-      default:
-        // wrong character! display the menu again!
-        isValidInput = false;
-        break;
-    }
-  } while ( isValidInput == true );
+  motor1.setSpeed(0);     // Motor 1 stops.
+  delay(1000);
 }
