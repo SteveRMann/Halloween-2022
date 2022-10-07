@@ -14,6 +14,6 @@ void setup() {
   button.attachClick(singleClick);
   button.attachLongPressStop(longPress);
 
-  //twitch(1);
+  wag(1);
   drawMenu();
 }

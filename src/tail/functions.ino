@@ -52,8 +52,8 @@ void stop(int duration) {
 
 // ---------- button functions ----------
 void singleClick() {
-  Serial.println(F("singleClick=twitch(1)"));
-  twitch(1);
+  Serial.println(F("singleClick=twitch(5)"));
+  twitch(5);
 }
 
 void doubleclick() {
@@ -62,6 +62,6 @@ void doubleclick() {
 }
 
 void longPress() {
-  Serial.println(F("longPress=wag(2)"));
-  wag(2);
+  Serial.println(F("longPress=wag(5)"));
+  wag(5);
 }
