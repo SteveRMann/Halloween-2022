@@ -1,14 +1,8 @@
 # MonsterBox
-This project is a monster in a box for Halloween.
-It describes building the crate from wood salvaged from palletts,
-and the code to randomly open the box.
+This project is further development of the 2021 monster in a box for Halloween.
+The biggest change is the addition of a bubble generator.
 
-The motors were from power drills.  The main door motor drives an offset disc, like a cam, that 
-bumps the door open anot an inch.  By controlling the door, we can open for a peek or bounce the lid to get attention.
-
-An ultrasonic fog transducer from Amazon is also inside the box to add fog effects.
-
-## Crate
+## Crate Ideas
 Contains images and ideas for the crate construction
 
 ## Fan
@@ -21,12 +15,11 @@ Just contains random notes used while making the box
 Contains the sound files and editing information. It also contains the DFPlayer notes.
 
 ## src
-### eggDrop
-This is the code that operates a servo to drop an egg.
-EggDrop is separate from the monster box, but basically it drops a plastic egg on command.
+### dfPlayer
+This is the code that controls the sounds from the box
 
 ### HBridgeTest
-Code to test the H-Bridges
+Code to test the H-Bridge. This year we changed to a library to control the tail H-bridge
 
 ### Lid
 Contains the Arduino source code for the lid mechanism.
@@ -38,4 +31,4 @@ Code to sweep the servo 0-180 degrees.
 Code used to calibrate the PWM endpoints for servo.h
 
 ### tail
-Code to make the dragon's tail sweep back and forth
+Code to make the sea monster's tail sweep back and forth.
