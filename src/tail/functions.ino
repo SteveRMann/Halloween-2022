@@ -7,58 +7,36 @@ const int QUARTERSPEED = HALFSPEED / 2;
 const int FASTSPEED = SPEED * 2;;
 
 
-void motorRun(int pwm, int duration) {
-  motor1.setSpeed(pwm);
-  delay (duration);
-  motor1.setSpeed(0);     // Motor 1 stops.
-}
 
-
+//A wag starts here
 void wag(int count) {
   for (int i = 0; i < count; i++) {
-    motorRun(SPEED, 500 );               //(int pwm, int duration)
-    stop(500);                              //Stop then pause
-    motorRun(-SPEED, 500);
-    stop(500);
+    pwm = SPEED;
+    duration = 800;         //How long a wag lasts
+    motorRun();
   }
-  motor1.setSpeed(0);
 }
 
-void twitch(int count) {
-  for (int i = 0; i < count; i++) {
-    motorRun(SPEED, 100 );               //(int pwm, int duration)
-    stop(100);                             //Stop then pause
-    motorRun(-SPEED, 100 );               //(int pwm, int duration)
-  }
-  motor1.setSpeed(0);
+void motorRun() {
+  //Start the ticker
+  motorTicker.attach_ms(duration, myTicker::motorStop);
+  motor1.setSpeed(pwm);               //Turn on the motor
+  motorFlag = false;
+  motorState = 1;
 }
 
-void stop(int duration) {
-  motor1.setSpeed(0);     // Motor 1 stops.
-  delay (duration);
-}
 
-/*
-  void rampUp() {
-  motor1.setSpeed(0);     // Motor 1 stops.
-  for (int i = 0; i < 128; i++) {
-    motor1.setSpeed(i);   // Motor 1 runs forward
-    delay(10);
-  }
-  motor1.setSpeed(0);     // Motor 1 stops.
-  }
-*/
 
 
 // ---------- button functions ----------
 void singleClick() {
   Serial.println(F("singleClick=twitch(5)"));
-  twitch(5);
+//  twitch(5);
 }
 
 void doubleclick() {
   Serial.println(F("doubleClick=largeTwitch(1)"));
-  //largeTwitch(1);
+//  largeTwitch(1);
 }
 
 void longPress() {

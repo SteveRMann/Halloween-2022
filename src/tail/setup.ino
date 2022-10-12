@@ -4,11 +4,16 @@ void setup() {
   pinMode (BUTTON_PIN, INPUT_PULLUP);
   pinMode (BLUE_LED_PIN, OUTPUT);
 
+  //Start the tickers
+  wagTicker.attach_ms(tickerInterval, myTicker::periodicWag);
+  blueTicker.attach(0.2, myTicker::blueTick);
+
   myFunctions::beginSerial();
   myWifiMulti::setup_wifiMulti();       // MUST be before setupMqtt()
+  blueTicker.detach();                  // Stop blueTick() after WiFi connects
   myOTA::start_OTA();
-  myMqtt::setup_mqtt();                 // Generate the topics
-
+  
+  randomSeed(analogRead(0));
 
   button.attachDoubleClick(doubleclick);
   button.attachClick(singleClick);

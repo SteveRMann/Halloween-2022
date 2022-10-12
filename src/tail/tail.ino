@@ -1,10 +1,21 @@
+
+
 #define SKETCH "tail"
-#define VERSION "3.0"
+#define VERSION "4.0"
+
+//Version 4.0 - Added a LDR sensor to detect the motor turns
+#define LEDOFF LOW
+#define LEDON HIGH
+#define LEDPIN D4
+#define LDRPIN A0
+int threshold = 800;
+
 
 #include "myFunctions.h"
 #include "myOTA.h"
 #include "myWiFiMulti.h"
-#include "myMqtt.h"
+#include "myTicker.h"
+
 
 // Configure the motor driver.
 #include "CytronMotorDriver.h"
@@ -19,15 +30,16 @@ char nodeName[] = SKETCH;
 //GPIO Pins
 const int BUTTON_PIN = D3;
 
+int endTime = 0;                      // Used in the random wag
 
 
-// --------------- ticker declarations ---------------
-// for LED status
-#include <Ticker.h>
-Ticker blueTicker;
-const int BLUE_LED_PIN = D4;
 
-
-// --------------- button declarations ---------------
+// --------------- Button declarations ---------------
 #include "OneButton.h"
 OneButton button(BUTTON_PIN);
+
+
+// --------------- Motor declarations ---------------
+int motorState=0;
+int pwm;
+int duration;

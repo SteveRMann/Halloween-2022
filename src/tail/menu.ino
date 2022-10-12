@@ -21,18 +21,6 @@ void menu() {
       wag(1);
       c = '0';
     }
-
-    if (c == '2') {
-      Serial.println(F("2- One twitch"));
-      twitch(1);
-      c = '0';
-    }
-
-    if (c == '3') {
-      Serial.println(F("3- One slow wag"));
-//      slowWag(1);
-      c = '0';
-    }
   }
 }
 
