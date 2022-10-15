@@ -13,7 +13,7 @@ int threshold = 800;
 
 #include "myFunctions.h"
 #include "myOTA.h"
-#include "myWiFiMulti.h"
+#include "myWifiMulti.h"
 #include "myTicker.h"
 
 
