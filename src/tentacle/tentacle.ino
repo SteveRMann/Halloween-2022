@@ -1,5 +1,5 @@
-#define SKETCH "tail"
-#define VERSION "5.0"
+#define SKETCH "tentacle"
+#define VERSION "1.0"
 
 #define LEDOFF LOW
 #define LEDON HIGH
