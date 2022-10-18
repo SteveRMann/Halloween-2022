@@ -84,26 +84,27 @@ void motorStart(int speed) {
 void loop() {
   switch (motorState) {
     case (0):
+      //Motor is stopped, start it and move to case 1
       motorStart(motorSpeed);
       motorState = 1;
       break;
     case (1):
-      //Motor running, waiting for interrupt
+      //Start the motor running, waiting for interrupt to set state to 2
       digitalWrite(LEDPIN, LEDON);
       break;
     case (2):
-      //Interrupt happened
+      //Interrupt happened. Stop the motor and move to state 3
       motor1.setSpeed(0);         //Stop motor
       delay(500);
       motorState = 3;
       break;
     case (3):
-      //Delay ended, toggle direction
+      //Delay ended, toggle direction and move to state 3
       motorSpeed = motorSpeed * -1;
       motorState = 4;             //Start over in the opposite direction
       break;
     case (4):
-      //Future, delay between wags
+      //Delay between wags then go back to state 0 to start over.
       delay(1000);
       motorState = 0;
       break;

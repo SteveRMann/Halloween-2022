@@ -1,0 +1,14 @@
+The original breadboard had a PINHD-1X8 for the input side, but the production version uses six pins.
+
+Prototype pinout:
+1 - Ground
+2 - +5V
+3 - Ground
+4 - +5V
+5 - 5V isolation if the ESP is to be powered from the USB
+6 - +5V to the ESP
+7 - External trigger button
+8 - Ground
+
+The production version:
+2 - Connects to the limit switch on D5zzzzzzzz
