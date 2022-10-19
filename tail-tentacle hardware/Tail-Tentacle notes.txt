@@ -11,4 +11,4 @@ Prototype pinout:
 8 - Ground
 
 The production version:
-2 - Connects to the limit switch on D5zzzzzzzz
+2 - Connects to the limit switch on D5

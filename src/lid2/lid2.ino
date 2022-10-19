@@ -7,6 +7,8 @@
    Using Wemos D1 Mini
    Project is a monster box. The motor slightly opens the box periodically
    and randomly.
+
+   TO DO - Eyes need to blink when on.
 */
 
 
@@ -80,4 +82,4 @@ const int EYES_MIN = 5;            //Eye will dim to this value in loop
 const int EYES_MAX = 100;          //open() will bring eye back to this level.
 
 const int FAN_MAX = 255;
-const int FAN_MIN = 255;
+const int FAN_MIN = 0;

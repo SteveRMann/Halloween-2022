@@ -52,7 +52,6 @@ void setup() {
   closeTheLid();
 
   loopFlag = false;
-  dbgLoopFlg();
 
   analogWrite(FAN_PIN, FAN_MIN);
 
@@ -61,20 +60,22 @@ void setup() {
   eyes_ON();
   //eyes_OFF();
 
-/*
-  // ========== MOTORTEST ==========
-  // Neverending function to find the minimum torque needed
-  // to run the motor
-  maxTorque = 255;
-  while (1) {
-    sensorValue = analogRead(sensorPin);
-    runTorque = sensorValue;
-    Serial.print(F("runTorque= "));
-    Serial.println(runTorque);
-    startTheMotor();
-    delay(1000);
-  }
-*/
+  /*
+    // ========== MOTORTEST ==========
+    // Neverending function to find the minimum torque needed
+    // to run the motor
+    maxTorque = 255;
+    while (1) {
+      sensorValue = analogRead(sensorPin);
+      runTorque = sensorValue;
+      Serial.print(F("runTorque= "));
+      Serial.println(runTorque);
+      startTheMotor();
+      delay(1000);
+    }
+  */
 
-Serial.println(F("===================="));
+  loopFlag = true;        //Go right into looping
+  
+  Serial.println(F("===================="));
 } //End of setup()

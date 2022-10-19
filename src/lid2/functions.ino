@@ -51,13 +51,13 @@ void openTheLid() {
 
 // ---------- Close the lid ----------
 void closeTheLid() {
-  // Turn off bubbles
+  eyes_OFF();
 
   lidCloseTime.stop();                              //Make sure the random timer is off
-  analogWrite(FAN_PIN, FAN_MIN);
+  analogWrite(FAN_PIN, FAN_MIN);                    // Turn off bubbles
   startTheMotor();
   while (digitalRead(closedSwitch)) yield();        //Wait for the limit switch
-  analogWrite(MOTOR_PIN, 0);                        //Stop the motor
+  analogWrite(MOTOR_PIN, 0);                        //Stop the lid motor
   Serial.println(F("CLOSED"));
 }
 
@@ -112,6 +112,7 @@ IRAM_ATTR void actionButtonHandler() {
   if (interrupt_time - last_interrupt_time > 250)
   {
     buttonFlag = true;
+    loopFlag = false;                   //Turn off the loop if it was on
   }
   last_interrupt_time = interrupt_time;
 }
@@ -126,11 +127,4 @@ IRAM_ATTR void loopButtonHandler() {
     loopFlag = true;
   }
   last_interrupt_time = interrupt_time;
-}
-
-
-
-void dbgLoopFlg() {
-  Serial.print(F("loopFlag= "));
-  Serial.println(loopFlag);
 }
