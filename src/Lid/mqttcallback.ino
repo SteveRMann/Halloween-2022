@@ -47,13 +47,15 @@ void callback(String topic, byte * payload, unsigned int length) {
     if (!strcmp(message, "fanon")) {
       //Turn on the mist fan.
       Serial.println(F("Fan On"));
-      analogWrite(FAN_PIN, 250);
+      analogWrite(FAN_PIN, FAN_MAX);
+      delay(100);
+      analogWrite(FAN_PIN, FAN_MIN);
     }
 
     if (!strcmp(message, "fanoff")) {
       //Turn on the mist fan.
       Serial.println(F("Fan Off"));
-      analogWrite(FAN_PIN, 0);
+      analogWrite(FAN_PIN, FAN_OFF);
     }
 
     if (!strcmp(message, "eyeson")) {

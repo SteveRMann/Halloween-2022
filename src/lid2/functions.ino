@@ -27,7 +27,7 @@ void beginSerial() {
 void startTheMotor() {
   analogWrite(MOTOR_PIN, maxTorque);          //Turn on the motor (max torque) to get it started.
   delay(1);
-  ///while (!digitalRead(openSwitch) || !digitalRead(openSwitch)) yield(); //Wait until motor is not on a stop switch.
+  ///while (!digitalRead(OPEN_SWITCH) || !digitalRead(OPEN_SWITCH)) yield(); //Wait until motor is not on a stop switch.
   analogWrite(MOTOR_PIN, runTorque);          //Slow it down
 }
 
@@ -37,14 +37,14 @@ void startTheMotor() {
 void openTheLid() {
   // Turn on bubbles
   analogWrite(FAN_PIN, FAN_MAX);      //Every time we open the lid, turn the fan and eyes up to max.
+  delay(100);
+  analogWrite(FAN_PIN, FAN_MIN);
   eyesVal = EYES_MAX;
   analogWrite(EYES_PIN, eyesVal);
 
   startTheMotor();
-
-  while (digitalRead(openSwitch)) yield();     //Wait for the limit switch
+  while (digitalRead(OPEN_SWITCH)) yield();     //Wait for the limit switch
   analogWrite(MOTOR_PIN, 0);                   //Stop the motor
-
   Serial.println(F("OPEN"));
 }
 
@@ -54,9 +54,9 @@ void closeTheLid() {
   eyes_OFF();
 
   lidCloseTime.stop();                              //Make sure the random timer is off
-  analogWrite(FAN_PIN, FAN_MIN);                    // Turn off bubbles
+  analogWrite(FAN_PIN, FAN_OFF);                    // Turn off bubbles
   startTheMotor();
-  while (digitalRead(closedSwitch)) yield();        //Wait for the limit switch
+  while (digitalRead(CLOSED_SWITCH)) yield();        //Wait for the limit switch
   analogWrite(MOTOR_PIN, 0);                        //Stop the lid motor
   Serial.println(F("CLOSED"));
 }

@@ -48,8 +48,9 @@ void setup() {
   Serial.println(F("Test the fan."));
   analogWrite(FAN_PIN, FAN_MAX);
   delay(2000);
-  analogWrite(FAN_PIN, 0);
-  delay(1000);                                //Wait a second before opening the lid
+  analogWrite(FAN_PIN, FAN_MIN);
+  delay(2000);
+  analogWrite(FAN_PIN, FAN_OFF);
 
   //Lid
   Serial.println(F("Test the lid."));
@@ -61,27 +62,27 @@ void setup() {
   loopFlag = false;
   dbgLoopFlg();
 
-  analogWrite(FAN_PIN, FAN_MIN);
+
 
 
   //Start the timers
   eyes_ON();
   //eyes_OFF();
 
-/*
-  // ========== MOTORTEST ==========
-  // Neverending function to find the minimum torque needed
-  // to run the motor
-  maxTorque = 255;
-  while (1) {
-    sensorValue = analogRead(sensorPin);
-    runTorque = sensorValue;
-    Serial.print(F("runTorque= "));
-    Serial.println(runTorque);
-    startTheMotor();
-    delay(1000);
-  }
-*/
+  /*
+    // ========== MOTORTEST ==========
+    // Neverending function to find the minimum torque needed
+    // to run the motor
+    maxTorque = 255;
+    while (1) {
+      sensorValue = analogRead(sensorPin);
+      runTorque = sensorValue;
+      Serial.print(F("runTorque= "));
+      Serial.println(runTorque);
+      startTheMotor();
+      delay(1000);
+    }
+  */
 
 
 

@@ -1,6 +1,6 @@
 //=============== loop ===============
 void loop() {
-  
+
   //Check the timers
   eyesLED_onTime.update();
   eyesLED_offTime.update();        //Blink eye
@@ -17,7 +17,7 @@ void loop() {
 
 
   if (loopFlag) {
-    Serial.println(F("Loop button pressed"));
+    //Serial.println(F("Looping"));
     int closeTime = random(2500, 6000);
     Serial.print(F("Closing lid for "));
     Serial.print(closeTime);
@@ -27,7 +27,5 @@ void loop() {
     lidRandom();                    //Open the lid for a random time
   }
 
-
   eyes_DIM();
-
 }

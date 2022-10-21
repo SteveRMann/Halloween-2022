@@ -1,7 +1,7 @@
 //=============== setup ===============
 void setup() {
-  pinMode(closedSwitch, INPUT_PULLUP);
-  pinMode(openSwitch, INPUT_PULLUP);
+  pinMode(CLOSED_SWITCH, INPUT_PULLUP);
+  pinMode(OPEN_SWITCH, INPUT_PULLUP);
   pinMode (BUTTON_PIN, INPUT_PULLUP);
   pinMode (LOOP_PIN, INPUT_PULLUP);
   pinMode(BLUE_LED_PIN, OUTPUT);
@@ -41,8 +41,9 @@ void setup() {
   Serial.println(F("Test the fan."));
   analogWrite(FAN_PIN, FAN_MAX);
   delay(2000);
-  analogWrite(FAN_PIN, 0);
-  delay(1000);                                //Wait a second before opening the lid
+  analogWrite(FAN_PIN, FAN_MIN);
+  delay(2000);
+  analogWrite(FAN_PIN, FAN_OFF);
 
   //Lid
   Serial.println(F("Test the lid."));
@@ -52,8 +53,6 @@ void setup() {
   closeTheLid();
 
   loopFlag = false;
-
-  analogWrite(FAN_PIN, FAN_MIN);
 
 
   //Start the timers

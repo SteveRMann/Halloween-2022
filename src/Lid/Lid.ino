@@ -1,6 +1,6 @@
 #define SKETCH "lid.ino"
 #define VERSION "7.0"
-#define NODENAME "cgm"
+#define NODENAME "lid"
 
 
 //Version 6.5- Made eyes blink
@@ -127,4 +127,5 @@ const int EYES_MIN = 5;            //Eye will dim to this value in loop
 const int EYES_MAX = 100;          //open() will bring eye back to this level.
 
 const int FAN_MAX = 255;
-const int FAN_MIN = 255;
+const int FAN_MIN = 128;
+const int FAN_OFF = 0;

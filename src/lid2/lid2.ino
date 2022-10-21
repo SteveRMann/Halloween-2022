@@ -17,8 +17,8 @@ const int LED_OFF = 0;
 int sensorPin = A0;    // potentiometer used in motortest (seup.ino)
 int sensorValue = 0;
 
-const int closedSwitch = D1;              //Limit pin, stops the motor. (yellow)
-const int openSwitch = D2;                //Limit pin, stops the motor. (pink)
+const int CLOSED_SWITCH = D1;              //Limit pin, stops the motor. (yellow)
+const int OPEN_SWITCH = D2;                //Limit pin, stops the motor. (pink)
 const int MOTOR_PIN = D3;                 //Controls the motor. (violet)
 const int BUTTON_PIN = D4;                //Action button (Also LED_BUILTIN)
 const int EYES_PIN = D5;                  //Eyes
@@ -82,4 +82,5 @@ const int EYES_MIN = 5;            //Eye will dim to this value in loop
 const int EYES_MAX = 100;          //open() will bring eye back to this level.
 
 const int FAN_MAX = 255;
-const int FAN_MIN = 0;
+const int FAN_MIN = 128;
+const int FAN_OFF = 0;

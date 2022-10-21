@@ -41,6 +41,8 @@ void openTheLid() {
   Serial.println(F("1"));
 
   analogWrite(FAN_PIN, FAN_MAX);      //Every time we open the lid, turn the fan and eyes up to max.
+  delay(100);
+  analogWrite(FAN_PIN, FAN_MIN);
   eyesVal = EYES_MAX;
   analogWrite(EYES_PIN, eyesVal);
 
@@ -55,12 +57,11 @@ void openTheLid() {
 // ---------- Close the lid ----------
 void closeTheLid() {
   // Turn off bubbles
-  //client.publish ("dfplayer/cmnd", "5");
-  //Serial.print(F("dfplayer/cmnd, "));
-  //Serial.println(F("5"));
+  // Bubbles are using the fan pin
+
 
   lidCloseTime.stop();                              //Make sure the random timer is off
-  analogWrite(FAN_PIN, FAN_MIN);
+  analogWrite(FAN_PIN, FAN_OFF);
   startTheMotor();
   while (digitalRead(closedSwitch)) yield();        //Wait for the limit switch
   analogWrite(MOTOR_PIN, 0);                        //Stop the motor
