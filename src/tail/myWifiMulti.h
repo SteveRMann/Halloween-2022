@@ -48,12 +48,14 @@ void setup_wifiMulti() {
   WiFi.mode(WIFI_STA);
 
   // Register multi WiFi networks
-  wifiMulti.addAP(MYSSID, MY_PASSWORD);
-  wifiMulti.addAP("Naboo", NABOO_PASSWORD);
-  wifiMulti.addAP("Serenity", SERENITY_PASSWORD);
+  wifiMulti.addAP(MY_SSID, MY_PASSWORD);
+  wifiMulti.addAP(IOT_SSID, IOT_PASSWORD);
+  wifiMulti.addAP(GUEST_SSID, GUEST_PASSWORD);
 
   if (wifiMulti.run(connectTimeoutMs) == WL_CONNECTED) {
     wifiConnected();
+  } else{
+    Serial.println(F("WiFi failed"));
   }
 }
 

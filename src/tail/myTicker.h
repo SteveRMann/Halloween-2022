@@ -39,8 +39,8 @@ void blueTick() {
 void periodicWag() {
   wagFlag = true;                                   //We can't put wag() here in a callback because it uses delay()
   tickerInterval = random(1000, 6000);
-  Serial.print(F("tickerInterval= "));
-  Serial.println(tickerInterval);
+  //Serial.print(F("tickerInterval= "));
+  //Serial.println(tickerInterval);
   wagTicker.detach();
   wagTicker.attach_ms(tickerInterval, periodicWag);
 }
